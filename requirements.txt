@@ -1,0 +1,7 @@
+django
+twilio
+python-dotenv
+pyngrok
+google-generativeai
+requests
+Pillow

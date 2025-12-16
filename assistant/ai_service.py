@@ -71,7 +71,8 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                     # Use Gemini to transcribe
                     # We use a simple model first just for transcription to save quota on the main reasoning model if possible, 
                     # but flash-lite is good for everything.
-                    model_stt = genai.GenerativeModel('gemini-2.0-flash-lite-preview-02-05')
+                    # but flash-lite is good for everything.
+                    model_stt = genai.GenerativeModel('gemini-2.5-flash')
                     
                     # Upload the file to Gemini
                     myfile = genai.upload_file(tmp_file_path, mime_type="audio/ogg")
@@ -166,15 +167,11 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
         # -------------------------------------
 
         # List of models to try in order of preference/likelihood of quota
+        # List of models to try in order of preference/likelihood of quota
         candidate_models = [
-            'gemini-flash-lite-latest',
-            'gemini-pro-latest',
-            'gemini-2.0-flash-lite-preview-02-05',
-            'gemini-2.0-flash-lite-preview',
-            'gemini-2.5-flash-lite', 
             'gemini-2.5-flash',
-            'gemini-2.0-flash-lite-001',
-            'gemini-exp-1206'
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
         ]
 
         last_error = None

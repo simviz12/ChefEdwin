@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Director's Console - Chef Edwin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .stat-trend {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #4ade80;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .panel h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .report-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: rgba(59, 130, 246, 0.5);
+            margin-left: auto;
+        }
+
+        .message.ai {
+            background: rgba(16, 185, 129, 0.5);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chatInput {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        #sendBtn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #sendBtn:hover {
+            transform: scale(1.05);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 10px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Director's Console</h1>
+            <div class="user-info">
+                <span>👨‍🏫 Prof. {{ user.username }}</span>
+                <a href="{% url 'admin:index' %}" style="color: white; text-decoration: none;">⚙️ Admin</a>
+            </div>
+        </header>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Students</div>
+                <div class="stat-value">{{ stats.total_students }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active in Last 30 Days</div>
+                <div class="stat-value">{{ stats.active_students }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Top Course Trend</div>
+                <div class="stat-value">{{ stats.top_trend }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Average Grade Impact</div>
+                <div class="stat-value">{{ stats.avg_impact }}</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Quick Reports Panel -->
+            <div class="panel">
+                <h2>Quick Reports</h2>
+                <div class="report-buttons">
+                    <a href="{% url 'export_csv' %}" class="btn btn-primary">
+                        📊 Download Monthly PDF Report
+                    </a>
+                    <a href="{% url 'export_pdf' %}" class="btn btn-secondary">
+                        📄 Export Full Data (CSV/Excel)
+                    </a>
+                </div>
+            </div>
+
+            <!-- Research Chat AI Panel -->
+            <div class="panel">
+                <h2>Research Chat AI</h2>
+                <p style="opacity: 0.8; margin-bottom: 15px; font-size: 0.9rem;">
+                    Analyze the correlation between early morning daily habits and cooking questions for students in Pastry course. Identify any emerging trends.
+                </p>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai">
+                            👋 Hola, soy el Director de Investigación. Puedo analizar toda la base de datos de conversaciones. ¿Qué te gustaría investigar?
+                        </div>
+                    </div>
+                    <div class="loading" id="loading">🔄 Analizando datos...</div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" placeholder="Escribe tu pregunta de investigación..." />
+                        <button id="sendBtn">Analyze with Chef Edwin AI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const loading = document.getElementById('loading');
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        async function sendMessage() {
+            const question = chatInput.value.trim();
+            if (!question) return;
+
+            // Add user message
+            addMessage(question, 'user');
+            chatInput.value = '';
+
+            // Show loading
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('{% url "research_chat" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+
+                if (data.response) {
+                    addMessage(data.response, 'ai');
+                } else {
+                    addMessage('Error: No se pudo obtener respuesta.', 'ai');
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                addMessage('Error de conexión. Intenta de nuevo.', 'ai');
+            }
+        }
+
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>

@@ -145,3 +145,8 @@ TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
+# Login/Logout Configuration
+LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/assistant/dashboard/'
+LOGOUT_REDIRECT_URL = '/admin/login/'

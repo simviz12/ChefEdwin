@@ -1,34 +1,31 @@
+
 import google.generativeai as genai
-from django.conf import settings
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-api_key = os.getenv('GEMINI_API_KEY')
-genai.configure(api_key=api_key)
+genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 
-candidates = [
-    "gemini-1.5-flash",
-    "gemini-1.5-flash-001",
-    "gemini-1.5-flash-002",
-    "gemini-1.5-pro",
-    "gemini-1.5-pro-001",
-    "gemini-1.5-pro-002",
-    "gemini-2.0-flash-exp",
-    "gemini-exp-1206",
-    # Fallbacks
-    "gemini-pro"
-]
+print("Searching for a working model...")
+working_model = None
 
-print(f"Testing models with API Key ending in ...{api_key[-5:]}")
+try:
+    for m in genai.list_models():
+        if 'generateContent' in m.supported_generation_methods:
+            print(f"Testing {m.name}...")
+            try:
+                model = genai.GenerativeModel(m.name)
+                res = model.generate_content("Hello")
+                if res and res.text:
+                    print(f"✅ SUCCESS: {m.name}")
+                    working_model = m.name
+                    break
+            except Exception as e:
+                print(f"❌ Failed: {e}")
+except Exception as e:
+    print(f"Critical Error: {e}")
 
-for model_name in candidates:
-    print(f"\nTesting {model_name}...")
-    try:
-        model = genai.GenerativeModel(model_name)
-        response = model.generate_content("Hello")
-        print(f"✅ SUCCESS! {model_name} is working.")
-        print(f"Response: {response.text}")
-        break # Found one!
-    except Exception as e:
-        print(f"❌ Failed: {e}")
+if working_model:
+    print(f"FOUND WORKING MODEL: {working_model}")
+else:
+    print("NO WORKING MODEL FOUND")

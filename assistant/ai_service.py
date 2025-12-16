@@ -82,12 +82,15 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                     transcription = result.text.strip()
                     print(f"🗣️ Transcription: {transcription}")
                     
-                    # OVERWRITE user_message with the transcription
-                    # So the rest of the brain treats it as text
-                    if not user_message:
-                        user_message = f"[TRANSCRIPCIÓN DE AUDIO]: {transcription}"
+                    if not transcription:
+                        user_message = "🔴 [ERROR]: El usuario envió un audio pero no pude transcribirlo. Pídele que lo intente de nuevo."
                     else:
-                        user_message += f"\n[TRANSCRIPCIÓN DE AUDIO]: {transcription}"
+                        # OVERWRITE user_message with the transcription
+                        # So the rest of the brain treats it as text
+                        if not user_message:
+                            user_message = f"[TRANSCRIPCIÓN DE AUDIO]: {transcription}"
+                        else:
+                            user_message += f"\n[TRANSCRIPCIÓN DE AUDIO]: {transcription}"
                         
                 else:
                     print(f"Failed to download audio: {audio_response.status_code}")

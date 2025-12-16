@@ -404,10 +404,11 @@ Responde de forma profesional, concisa y basada en datos. Usa español."""
         genai.configure(api_key=settings.GEMINI_API_KEY)
         
         # Try multiple models with fallback
+        # Try multiple models with fallback
         models = [
-            'gemini-2.0-flash-lite-preview-02-05',
-            'gemini-flash-lite-latest',
-            'gemini-pro-latest',
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
+            'gemini-pro',
         ]
         
         response_text = None

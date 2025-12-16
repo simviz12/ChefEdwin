@@ -380,6 +380,9 @@ def research_chat(request):
         # Get ALL conversation data
         all_logs = ConversationLog.objects.select_related('student').order_by('-timestamp')[:500]  # Last 500 for performance
         
+        if not all_logs:
+            return JsonResponse({'response': "👨‍🍳 **Director de Investigación Reportando:**\n\nHe consultado la base de datos y... ¡está vacía! 🕸️\n\nAún no tengo registros de conversaciones con estudiantes para analizar. En cuanto tus alumnos empiecen a hablar con Chef Edwin en WhatsApp, podré darte estadísticas, tendencias y consejos pedagógicos.\n\n¡Anímalos a participar!"})
+
         # Build context from database
         context_data = []
         for log in all_logs:
@@ -388,17 +391,22 @@ def research_chat(request):
         
         full_context = "\n".join(context_data)
         
-        # Director de Investigación prompt
-        system_prompt = """Eres el Director de Investigación Institucional de una escuela de cocina.
-Tu trabajo es analizar datos de conversaciones entre estudiantes y Chef Edwin (un asistente de IA).
+        # Director de Investigación prompt enhanced
+        system_prompt = """Eres el **Director de Innovación Educativa y Culinaria** de 'Chef Edwin Academy'.
+Tu misión es interpretar la data cruda de las interacciones estudiantes-IA para potenciar el aprendizaje.
 
-Capacidades:
-- Identificar patrones en preguntas de estudiantes
-- Correlacionar temas con rendimiento académico
-- Detectar tendencias emergentes en intereses culinarios
-- Sugerir mejoras curriculares basadas en datos
+**Tu Personalidad:**
+- Eres visionario, entusiasta y profundamente analítico.
+- No eres un robot aburrido; eres un consultor pedagógico de alto nivel.
+- Usas emojis estratégicamente para enfatizar puntos clave.
 
-Responde de forma profesional, concisa y basada en datos. Usa español."""
+**Tus Objetivos:**
+1. 🕵️ **Detective de Patrones:** Encuentra qué confunde a los estudiantes (ej. ¿todos fallan en el merengue?).
+2. 📈 **Estratega Curricular:** Sugiere talleres o repasos basados en las dudas reales.
+3. 🔮 **Cazador de Tendencias:** ¿Están preguntando mucho por cocina molecular? ¡Avisad al Chef!
+
+**Instrucción Clave:**
+Básate EXCLUSIVAMENTE en los 'DATOS DE CONVERSACIONES' provistos. SI NO HAY DATOS SUFICIENTES para una conclusión sólida, dilo honestamente pero sugiere qué buscar en el futuro."""
         
         # Configure Gemini
         genai.configure(api_key=settings.GEMINI_API_KEY)
@@ -417,13 +425,13 @@ Responde de forma profesional, concisa y basada en datos. Usa español."""
                 
                 prompt = f"""{system_prompt}
 
-DATOS DE CONVERSACIONES:
-{full_context[:10000]}  # Limit to 10k chars to avoid token limits
+📥 **DATOS DE CONVERSACIONES (Muestra Reciente):**
+{full_context[:15000]}
 
-PREGUNTA DEL PROFESOR:
-{question}
+❓ **CONSULTA DEL DIRECTOR (Usuario):**
+"{question}"
 
-Analiza los datos y responde de forma concisa (máximo 300 palabras)."""
+💡 **TU ANÁLISIS (Responde en español, sé perspicaz y accionable):**"""
                 
                 result = model.generate_content(prompt)
                 response_text = result.text

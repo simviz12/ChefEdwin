@@ -33,6 +33,24 @@ def test_image_message():
     except Exception as e:
         print(f"Test Failed: {e}")
 
+def test_teacher_message():
+    print("\n>>> Testing Teacher Message (Role Identification)...")
+    url = 'http://127.0.0.1:8000/assistant/webhook/'
+    data = {
+        'Body': 'Analiza el rendimiento del estudiante basado en su ultima receta',
+        'NumMedia': '0',
+        # Using the number defined in .env as TEACHER_NUMBER (make sure .env matches this or update .env)
+        # In .env currently: whatsapp:+573217214397
+        'From': 'whatsapp:+573217214397' 
+    }
+    try:
+        response = requests.post(url, data=data)
+        print(f"Status: {response.status_code}")
+        print(f"Response: {response.text[:500]}...")
+    except Exception as e:
+        print(f"Test Failed: {e}")
+
 if __name__ == "__main__":
     test_text_message()
     test_image_message()
+    test_teacher_message()

@@ -342,7 +342,7 @@ def teacher_dashboard(request):
     ).count()
     
     # Top trend (most discussed topic - simplified)
-    top_trend = "Italian"  # You can make this dynamic based on conversation analysis
+    top_trend = "Italiana"  # You can make this dynamic based on conversation analysis
     
     # Average impact (placeholder - you can calculate based on your metrics)
     avg_impact = "+15%"

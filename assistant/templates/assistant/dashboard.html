@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -209,10 +210,11 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
-            <h1>Director's Console</h1>
+            <h1>Consola del Director</h1>
             <div class="user-info">
                 <span>👨‍🏫 Prof. {{ user.username }}</span>
                 <a href="{% url 'admin:index' %}" style="color: white; text-decoration: none;">⚙️ Admin</a>
@@ -222,19 +224,19 @@
         <!-- Statistics Cards -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">Total Students</div>
+                <div class="stat-label">Total Estudiantes</div>
                 <div class="stat-value">{{ stats.total_students }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Active in Last 30 Days</div>
+                <div class="stat-label">Activos (30 días)</div>
                 <div class="stat-value">{{ stats.active_students }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Top Course Trend</div>
+                <div class="stat-label">Tendencia Principal</div>
                 <div class="stat-value">{{ stats.top_trend }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Average Grade Impact</div>
+                <div class="stat-label">Impacto Promedio</div>
                 <div class="stat-value">{{ stats.avg_impact }}</div>
             </div>
         </div>
@@ -243,33 +245,35 @@
         <div class="content-grid">
             <!-- Quick Reports Panel -->
             <div class="panel">
-                <h2>Quick Reports</h2>
+                <h2>Reportes Rápidos</h2>
                 <div class="report-buttons">
                     <a href="{% url 'export_csv' %}" class="btn btn-primary">
-                        📊 Download Monthly PDF Report
+                        📊 Descargar Reporte PDF
                     </a>
                     <a href="{% url 'export_pdf' %}" class="btn btn-secondary">
-                        📄 Export Full Data (CSV/Excel)
+                        📄 Exportar Datos (CSV)
                     </a>
                 </div>
             </div>
 
             <!-- Research Chat AI Panel -->
             <div class="panel">
-                <h2>Research Chat AI</h2>
+                <h2>IA de Investigación</h2>
                 <p style="opacity: 0.8; margin-bottom: 15px; font-size: 0.9rem;">
-                    Analyze the correlation between early morning daily habits and cooking questions for students in Pastry course. Identify any emerging trends.
+                    Analiza tendencias, patrones de aprendizaje y estadísticas de tus estudiantes conversando
+                    directamente con la base de datos.
                 </p>
                 <div class="chat-container">
                     <div class="chat-messages" id="chatMessages">
                         <div class="message ai">
-                            👋 Hola, soy el Director de Investigación. Puedo analizar toda la base de datos de conversaciones. ¿Qué te gustaría investigar?
+                            👋 Hola, soy el Director de Investigación. Puedo analizar toda la base de datos de
+                            conversaciones. ¿Qué te gustaría investigar?
                         </div>
                     </div>
                     <div class="loading" id="loading">🔄 Analizando datos...</div>
                     <div class="chat-input-container">
                         <input type="text" id="chatInput" placeholder="Escribe tu pregunta de investigación..." />
-                        <button id="sendBtn">Analyze with Chef Edwin AI</button>
+                        <button id="sendBtn">Analizar</button>
                     </div>
                 </div>
             </div>
@@ -331,4 +335,5 @@
         }
     </script>
 </body>
+
 </html>

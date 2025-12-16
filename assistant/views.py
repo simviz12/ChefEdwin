@@ -42,9 +42,20 @@ def webhook(request):
             return HttpResponse(str(response), content_type='text/xml')
         
         if not student.is_authenticated:
-            # Check hashed password
+            # Check hashed password OR plain text (fallback for manually created users)
             user_input_pass = msg.strip()
-            if student.check_password(user_input_pass):
+            
+            # 1. Try secure hash check
+            is_valid = student.check_password(user_input_pass)
+            
+            # 2. Fallback: Check if password is stored as plain text (common in testing)
+            if not is_valid and student.password == user_input_pass:
+                is_valid = True
+                # Auto-fix: Hash it for next time
+                student.set_password(user_input_pass)
+                student.save()
+
+            if is_valid:
                 student.is_authenticated = True
                 student.save()
                 response.message("✅ Acceso Concedido. Bienvenido a la cocina de Chef Edwin. ¿Qué necesitas?")

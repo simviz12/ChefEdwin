@@ -16,11 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('assistant/', include('assistant.urls')),
-    path('ping-root/', lambda request: HttpResponse('pong-root'), name='ping_root'),
-    path('', lambda request: HttpResponse('<h1>Chef Edwin is Alive</h1>'), name='home'),
 ]

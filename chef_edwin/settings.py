@@ -28,22 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fs@=rtgqcaczbdt_k(i02$8*p$81&e=w6m-wb9xp7u(8(wqqts')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # FORCED TRUE FOR DEBUGGING
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-# Log available URLs to console on startup
-import sys
-from django.urls import get_resolver
-try:
-    resolver = get_resolver()
-    print("=== ACTIVE URL PATTERNS ===", file=sys.stderr)
-    for pattern in resolver.url_patterns:
-        print(pattern, file=sys.stderr)
-    print("===========================", file=sys.stderr)
-except Exception as e:
-    print(f"Error printing URLs: {e}", file=sys.stderr)
-
-ALLOWED_HOSTS = ['*']  # Temporarily allow all for debugging
-
+ALLOWED_HOSTS = ['*']  # Keep strict for now, can be restricted later
 
 # Application definition
 
@@ -59,7 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # DISABLE FOR DEBUGGING
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Re-enabled!
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

@@ -381,15 +381,16 @@ def research_chat(request):
         all_logs = ConversationLog.objects.select_related('student').order_by('-timestamp')[:500]  # Last 500 for performance
         
         if not all_logs:
-            return JsonResponse({'response': "👨‍🍳 **Director de Investigación Reportando:**\n\nHe consultado la base de datos y... ¡está vacía! 🕸️\n\nAún no tengo registros de conversaciones con estudiantes para analizar. En cuanto tus alumnos empiecen a hablar con Chef Edwin en WhatsApp, podré darte estadísticas, tendencias y consejos pedagógicos.\n\n¡Anímalos a participar!"})
-
-        # Build context from database
-        context_data = []
-        for log in all_logs:
-            context_data.append(f"[{log.timestamp.strftime('%Y-%m-%d')}] {log.student.name if log.student else 'Unknown'}: {log.message_body}")
-            context_data.append(f"Chef Edwin: {log.chef_response}")
-        
-        full_context = "\n".join(context_data)
+            # SIMULATION MODE: Allow the user to test the AI even without data
+            full_context = "⚠️ [MODO DEMOSTRACIÓN] La base de datos está vacía. Responde preguntas hipotéticas o explica tu metodología de análisis como si tuvieras datos."
+        else:
+            # Build context from database
+            context_data = []
+            for log in all_logs:
+                context_data.append(f"[{log.timestamp.strftime('%Y-%m-%d')}] {log.student.name if log.student else 'Unknown'}: {log.message_body}")
+                context_data.append(f"Chef Edwin: {log.chef_response}")
+            
+            full_context = "\n".join(context_data)
         
         # Director de Investigación prompt enhanced
         system_prompt = """Eres el **Director de Innovación Educativa y Culinaria** de 'Chef Edwin Academy'.

@@ -98,6 +98,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                         
                 else:
                     print(f"Failed to download audio: {audio_response.status_code}")
+                    user_message = f"🔴 [ERROR DEL SISTEMA]: Falló la descarga del audio (Código {audio_response.status_code}). Verifica las credenciales de Twilio en Render."
 
             except Exception as audio_err:
                 print(f"❌ Error processing audio: {audio_err}")
@@ -168,6 +169,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                     print("Image downloaded and attached.")
                 else:
                     print(f"Failed to download image: {img_response.status_code}")
+                    user_message += f"\n[ERROR DEL SISTEMA]: El usuario intentó enviar una imagen pero falló la descarga (Código {img_response.status_code}). Posible error de credenciales Twilio."
             except Exception as img_err:
                 print(f"Error processing image: {img_err}")
         # -------------------------------------

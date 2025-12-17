@@ -280,6 +280,9 @@
         </div>
     </div>
 
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <script>
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
@@ -329,10 +332,19 @@
         function addMessage(text, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
-            messageDiv.textContent = text;
+
+            if (type === 'ai') {
+                // Parse Markdown for AI responses
+                messageDiv.innerHTML = marked.parse(text);
+            } else {
+                // Keep user messages as plain text for safety
+                messageDiv.textContent = text;
+            }
+
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
+    </script>
     </script>
 </body>
 

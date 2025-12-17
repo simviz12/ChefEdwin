@@ -59,22 +59,26 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                 if audio_response.status_code == 200:
                     import tempfile
                     
+                    content_type = audio_response.headers.get('Content-Type', 'audio/ogg')
+                    print(f"Audio Content-Type: {content_type}")
+
                     # Create a temporary file for the audio
-                    # Gemini usually expects a file path for upload_file
-                    with tempfile.NamedTemporaryFile(delete=False, suffix='.ogg') as tmp_file:
+                    # Use header to determine suffix if possible, else default to .ogg
+                    suffix = '.ogg'
+                    if 'mpeg' in content_type: suffix = '.mp3'
+                    elif 'wav' in content_type: suffix = '.wav'
+                    
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
                         tmp_file.write(audio_response.content)
                         tmp_file_path = tmp_file.name
 
-                    print("Transcribing audio...")
+                    print(f"Transcribing audio from {tmp_file_path}...")
                     
                     # Use Gemini to transcribe
-                    # We use a simple model first just for transcription to save quota on the main reasoning model if possible, 
-                    # but flash-lite is good for everything.
-                    # but flash-lite is good for everything.
                     model_stt = genai.GenerativeModel('gemini-2.5-flash')
                     
-                    # Upload the file to Gemini
-                    myfile = genai.upload_file(tmp_file_path, mime_type="audio/ogg")
+                    # Upload the file to Gemini with CORRECT MIME TYPE
+                    myfile = genai.upload_file(tmp_file_path, mime_type=content_type)
                     
                     # Generate transcript
                     result = model_stt.generate_content([myfile, "Transcribe this audio exactly. Do not add any conversational text."])

@@ -1,11 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Director's Console - Chef Edwin</title>
+    <title>Chef Edwin | Director's Console</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
+        :root {
+            --primary-bg: #0f172a;
+            --secondary-bg: #1e293b;
+            --accent-color: #10b981;
+            /* Emerald */
+            --accent-glow: rgba(16, 185, 129, 0.3);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --card-radius: 20px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,11 +34,15 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            color: var(--text-primary);
             min-height: 100vh;
-            color: #fff;
-            padding: 20px;
+            padding: 2rem;
+            line-height: 1.6;
         }
 
         .container {
@@ -25,187 +50,342 @@
             margin: 0 auto;
         }
 
+        /* --- Header --- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 3rem;
+            padding: 1rem 0;
         }
 
-        h1 {
+        .logo-area h1 {
+            font-family: 'Outfit', sans-serif;
             font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 2px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
-        .user-info {
+        .user-pill {
+            background: var(--glass-bg);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
+        /* --- Stats Grid --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Subtle Glow Effect on Hover */
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, var(--accent-glow), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::after {
+            opacity: 1;
         }
 
         .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
 
         .stat-value {
+            font-family: 'Outfit', sans-serif;
             font-size: 2.5rem;
-            font-weight: bold;
+            font-weight: 700;
+            color: #fff;
         }
 
-        .stat-trend {
-            font-size: 0.9rem;
-            margin-top: 10px;
-            color: #4ade80;
-        }
-
-        .content-grid {
+        /* --- Main Content Layout --- */
+        .content-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            align-items: start;
         }
 
-        .panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* --- Reports Panel (Left) --- */
+        .action-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            position: sticky;
+            top: 2rem;
         }
 
-        .panel h2 {
+        .panel-title {
+            font-family: 'Outfit', sans-serif;
             font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: 400;
-        }
-
-        .report-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #fff;
         }
 
         .btn {
-            padding: 15px 25px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            font-weight: 500;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            /* Transparent style */
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
         }
 
         .btn:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.02);
+            filter: brightness(1.1);
         }
 
-        .chat-container {
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Chat Interface (Right) --- */
+        .chat-panel {
+            background: rgba(15, 23, 42, 0.6);
+            /* Slightly darker for contrast */
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
             display: flex;
             flex-direction: column;
-            height: 500px;
+            height: 700px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: var(--card-radius) var(--card-radius) 0 0;
+        }
+
+        .chat-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-color);
         }
 
         .chat-messages {
             flex: 1;
+            padding: 2rem;
             overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            scroll-behavior: smooth;
         }
 
         .message {
-            margin-bottom: 15px;
-            padding: 12px 18px;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-
-        .message.user {
-            background: rgba(59, 130, 246, 0.5);
-            margin-left: auto;
+            max-width: 85%;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            border-radius: 18px;
+            font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
         }
 
         .message.ai {
-            background: rgba(16, 185, 129, 0.5);
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--glass-border);
+            border-bottom-left-radius: 4px;
+            margin-right: auto;
+            color: var(--text-primary);
         }
 
-        .chat-input-container {
+        .message.user {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-bottom-right-radius: 4px;
+            margin-left: auto;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Markdown Styling inside Messages */
+        .message.ai h1,
+        .message.ai h2,
+        .message.ai h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+            color: #fff;
+        }
+
+        .message.ai ul,
+        .message.ai ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .message.ai strong {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .message.ai p {
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-footer {
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.4);
+            border-top: 1px solid var(--glass-border);
+            border-radius: 0 0 var(--card-radius) var(--card-radius);
             display: flex;
-            gap: 10px;
+            gap: 1rem;
         }
 
         #chatInput {
             flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-        }
-
-        #sendBtn {
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
             color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
 
+        #chatInput:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        #sendBtn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
         #sendBtn:hover {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
-        .loading {
-            display: none;
+        .loading-indicator {
             text-align: center;
-            padding: 10px;
-            opacity: 0.7;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
         }
 
-        @media (max-width: 768px) {
-            .content-grid {
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .content-layout {
                 grid-template-columns: 1fr;
+            }
+
+            .action-panel {
+                position: static;
+            }
+
+            .chat-panel {
+                height: 600px;
             }
         }
     </style>
@@ -213,70 +393,106 @@
 
 <body>
     <div class="container">
+        <!-- Header -->
         <header>
-            <h1>Consola del Director</h1>
-            <div class="user-info">
-                <span>👨‍🏫 Prof. {{ user.username }}</span>
-                <a href="{% url 'admin:index' %}" style="color: white; text-decoration: none;">⚙️ Admin</a>
+            <div class="logo-area">
+                <h1>Chef Edwin <span style="font-weight: 300; font-size: 1.5rem; opacity: 0.7;">| AI Dashboard</span>
+                </h1>
+            </div>
+            <div class="user-pill">
+                <span>🟢 Online</span>
+                <span style="opacity: 0.3;">|</span>
+                <span>{{ user.username }}</span>
+                <a href="{% url 'admin:index' %}" style="margin-left: 10px; text-decoration: none; font-size: 1.2rem;"
+                    title="Admin Settings">⚙️</a>
             </div>
         </header>
 
-        <!-- Statistics Cards -->
+        <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Estudiantes</div>
                 <div class="stat-value">{{ stats.total_students }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Activos (30 días)</div>
-                <div class="stat-value">{{ stats.active_students }}</div>
+                <div class="stat-label">Usuarios Activos</div>
+                <div class="stat-value">{{ stats.active_students }} <span
+                        style="font-size: 1rem; color: var(--accent-color); vertical-align: middle; margin-left: 5px;">●</span>
+                </div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Tendencia Principal</div>
-                <div class="stat-value">{{ stats.top_trend }}</div>
+                <div class="stat-label">Tendencia Hot 🔥</div>
+                <div class="stat-value" style="font-size: 1.8rem;">{{ stats.top_trend }}</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Impacto Promedio</div>
+                <div class="stat-label">Impacto de IA</div>
                 <div class="stat-value">{{ stats.avg_impact }}</div>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="content-grid">
-            <!-- Quick Reports Panel -->
-            <div class="panel">
-                <h2>Reportes Rápidos</h2>
-                <div class="report-buttons">
-                    <a href="{% url 'export_csv' %}" class="btn btn-primary">
-                        📊 Descargar Reporte PDF
-                    </a>
-                    <a href="{% url 'export_pdf' %}" class="btn btn-secondary">
-                        📄 Exportar Datos (CSV)
-                    </a>
+        <!-- Layout -->
+        <div class="content-layout">
+
+            <!-- Left Panel: Actions -->
+            <div class="action-panel">
+                <h2 class="panel-title">Panel de Control</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                    Gestiona los datos de tu academia y exporta reportes detallados para análisis administrativo.
+                </p>
+
+                <a href="{% url 'export_csv' %}" class="btn btn-primary">
+                    <span>📊</span> Generar PDF Ejecutivo
+                </a>
+                <a href="{% url 'export_pdf' %}" class="btn btn-secondary">
+                    <span>💾</span> Exportar Data Cruda (CSV)
+                </a>
+
+                <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);">
+                    <small style="color: var(--text-secondary); display: block; margin-bottom: 0.5rem;">STATUS DEL
+                        SISTEMA</small>
+                    <div
+                        style="display: flex; align-items: center; gap: 8px; color: var(--accent-color); font-weight: 600;">
+                        <span>✓</span> Twilio Webhook: Activo
+                    </div>
+                    <div
+                        style="display: flex; align-items: center; gap: 8px; color: var(--accent-color); font-weight: 600; margin-top: 5px;">
+                        <span>✓</span> Gemini Brain: En Línea
+                    </div>
                 </div>
             </div>
 
-            <!-- Research Chat AI Panel -->
-            <div class="panel">
-                <h2>IA de Investigación</h2>
-                <p style="opacity: 0.8; margin-bottom: 15px; font-size: 0.9rem;">
-                    Analiza tendencias, patrones de aprendizaje y estadísticas de tus estudiantes conversando
-                    directamente con la base de datos.
-                </p>
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message ai">
-                            👋 Hola, soy el Director de Investigación. Puedo analizar toda la base de datos de
-                            conversaciones. ¿Qué te gustaría investigar?
-                        </div>
-                    </div>
-                    <div class="loading" id="loading">🔄 Analizando datos...</div>
-                    <div class="chat-input-container">
-                        <input type="text" id="chatInput" placeholder="Escribe tu pregunta de investigación..." />
-                        <button id="sendBtn">Analizar</button>
+            <!-- Right Panel: AI Chat -->
+            <div class="chat-panel">
+                <div class="chat-header">
+                    <h3>
+                        <span class="status-dot"></span>
+                        Director de Investigación (IA)
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 5px;">
+                        Analista de datos pedagógicos en tiempo real.
+                    </p>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai">
+                        👋 ¡Hola Chef! Soy tu analista de datos. <br>
+                        Tengo acceso a <strong>{{ stats.total_conversations }} interacciones</strong> de estudiantes.
+                        <br><br>
+                        ¿Qué deseas investigar hoy?
                     </div>
                 </div>
+
+                <div class="loading-indicator" id="loading">
+                    🔄 Analizando patrones en la base de datos...
+                </div>
+
+                <div class="chat-footer">
+                    <input type="text" id="chatInput"
+                        placeholder="Ej: 'Analiza por qué los alumnos fallan en repostería'...">
+                    <button id="sendBtn">➤</button>
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -289,23 +505,27 @@
         const sendBtn = document.getElementById('sendBtn');
         const loading = document.getElementById('loading');
 
-        sendBtn.addEventListener('click', sendMessage);
+        // Allow 'Enter' to send
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
+
+        // Click to send
+        sendBtn.addEventListener('click', sendMessage);
 
         async function sendMessage() {
             const question = chatInput.value.trim();
             if (!question) return;
 
-            // Add user message
+            // 1. Add User Message
             addMessage(question, 'user');
             chatInput.value = '';
 
-            // Show loading
+            // 2. Show Loading
             loading.style.display = 'block';
 
             try {
+                // 3. Backend Call
                 const response = await fetch('{% url "research_chat" %}', {
                     method: 'POST',
                     headers: {
@@ -316,35 +536,42 @@
                 });
 
                 const data = await response.json();
+
+                // 4. Hide Loading
                 loading.style.display = 'none';
 
+                // 5. Add AI Message
                 if (data.response) {
                     addMessage(data.response, 'ai');
                 } else {
-                    addMessage('Error: No se pudo obtener respuesta.', 'ai');
+                    addMessage("⚠️ No pude obtener una respuesta. Verifica la conexión.", 'ai');
                 }
             } catch (error) {
                 loading.style.display = 'none';
-                addMessage('Error de conexión. Intenta de nuevo.', 'ai');
+                addMessage("❌ Error de comunicación con el servidor.", 'ai');
+                console.error(error);
             }
         }
 
         function addMessage(text, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
 
             if (type === 'ai') {
-                // Parse Markdown for AI responses
-                messageDiv.innerHTML = marked.parse(text);
+                // Render Markdown for AI
+                msgDiv.innerHTML = marked.parse(text);
             } else {
-                // Keep user messages as plain text for safety
-                messageDiv.textContent = text;
+                // Plain text for User
+                msgDiv.textContent = text;
             }
 
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatMessages.appendChild(msgDiv);
+
+            // Auto-scroll to bottom
+            setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 50);
         }
-    </script>
     </script>
 </body>
 

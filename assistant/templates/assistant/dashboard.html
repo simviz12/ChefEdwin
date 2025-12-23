@@ -5,41 +5,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chef Edwin | Command Center</title>
-    <!-- Fonts -->
+    <title>Chef Edwin | Executive Suite</title>
+    <!-- Fonts: Inter Tight (Modern/Apple-like) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Outfit:wght@300;400;500;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <!-- Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Tilt -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
     <style>
         :root {
-            /* V6 Future Dark Palette */
-            --bg-deep: #050505;
-            --bg-surface: #0f0f11;
-            --bg-element: #18181b;
+            /* V10 HORIZON PALETTE */
+            --bg-app: #0f1115;
+            --bg-subtle: #16181d;
+            --bg-card: #1c1e24;
 
-            --primary: #10b981;
-            /* Emerald */
-            --primary-dim: #059669;
-            --primary-glow: rgba(16, 185, 129, 0.4);
+            --border-dim: #2a2d36;
+            --border-bright: #3f424e;
+
+            /* Executive Indigo */
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --primary-bg: rgba(99, 102, 241, 0.1);
+
+            --success: #10b981;
+            --warning: #f59e0b;
 
             --text-main: #ffffff;
-            --text-muted: #a1a1aa;
+            --text-sec: #94a3b8;
+            --text-dim: #64748b;
 
-            --border: rgba(255, 255, 255, 0.08);
-            --border-light: rgba(255, 255, 255, 0.12);
+            --font-ui: 'Inter Tight', -apple-system, system-ui, sans-serif;
+            --font-mono: 'Space Mono', monospace;
 
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-
-            --grid-gap: 24px;
+            --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
         * {
@@ -49,187 +50,313 @@
         }
 
         body {
-            background-color: var(--bg-deep);
+            background-color: var(--bg-app);
             color: var(--text-main);
-            font-family: 'Instrument Sans', sans-serif;
-            min-height: 100vh;
+            font-family: var(--font-ui);
+            font-size: 13px;
+            /* High density base */
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            padding: 2rem;
-            /* Subtle grain or noise could go here */
-            background-image:
-                radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            overflow: hidden;
+            /* Subtle grain texture overlay */
+            background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent 40%);
         }
 
-        .bento-container {
+        /* --- LAYOUT GRID --- */
+        .app-shell {
             width: 100%;
-            max-width: 1600px;
+            height: 100%;
             display: grid;
-            grid-template-columns: 1fr 340px;
-            /* Main Area vs Right Sidebar */
-            grid-template-rows: auto 1fr;
-            gap: var(--grid-gap);
+            grid-template-columns: 240px 1fr;
+            /* Fixed Sidebar / Fluid Content */
+            grid-template-rows: 60px 1fr;
+            /* Fixed Header / Fluid Body */
         }
 
-        /* --- 1. Header Area (Spans Full Width) --- */
-        .header-area {
-            grid-column: 1 / -1;
+        /* --- 1. SIDEBAR --- */
+        .sidebar {
+            grid-row: 1 / -1;
+            grid-column: 1;
+            background: var(--bg-subtle);
+            border-right: 1px solid var(--border-dim);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 0.5rem;
+            flex-direction: column;
+            padding: 24px 16px;
+            z-index: 20;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .brand h1 {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 2rem;
-            letter-spacing: -0.03em;
-            background: linear-gradient(to right, #fff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .version-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 4px 10px;
-            border-radius: 99px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .user-status {
+        .logo {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 99px;
+            padding-left: 8px;
+            margin-bottom: 32px;
         }
 
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        /* --- 2. Stats Row (Inside Main Area usually, but here spanning top of Left Col) --- */
-        /* Let's make Stats span the MAIN column (Left), and Profile is on Right */
-
-        .main-column {
-            display: flex;
-            flex-direction: column;
-            gap: var(--grid-gap);
-        }
-
-        .stats-strip {
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            border-radius: 8px;
+            box-shadow: 0 0 15px var(--primary-glow);
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            place-items: center;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin: 24px 0 12px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text-sec);
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 16px;
+        }
+
+        .user-block {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid var(--border-dim);
+        }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            background: #333;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 10px;
+            font-family: var(--font-mono);
+        }
+
+        /* --- 2. HEADER --- */
+        .top-bar {
+            grid-column: 2;
+            grid-row: 1;
+            border-bottom: 1px solid var(--border-dim);
+            background: rgba(15, 17, 21, 0.8);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 10;
+        }
+
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-sec);
+        }
+
+        .crumb-sep {
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        .crumb-current {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .top-actions {
+            display: flex;
             gap: 16px;
         }
 
-        .kpi-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 1.25rem;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .kpi-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--border-light);
-            background: var(--bg-element);
-        }
-
-        .kpi-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+        .pill-status {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
+            gap: 6px;
         }
 
-        .kpi-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1;
-            margin-bottom: 4px;
+        .pill-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
         }
 
-        .kpi-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-muted);
+        /* --- 3. MAIN DASHBOARD CONTENT --- */
+        .workspace {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            /* Stats Left / Chat Right */
+            gap: 24px;
+            overflow: hidden;
+        }
+
+        /* Left Column: Metrics Stack */
+        .metrics-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s var(--ease);
+        }
+
+        .card:hover {
+            border-color: var(--border-bright);
+            transform: translateY(-2px);
+        }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            margin-bottom: 8px;
         }
 
-        /* --- 3. Chat Console (Dominant Feature in Main Column) --- */
-        .chat-console {
-            flex: 1;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
+        .card-val {
+            font-size: 28px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .card-trend {
+            font-size: 12px;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .hero-metric {
+            background: linear-gradient(145deg, var(--bg-card), rgba(99, 102, 241, 0.05));
+        }
+
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tool-row {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-dim);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-sec);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            font-size: 12px;
+        }
+
+        .tool-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: var(--border-bright);
+        }
+
+        /* Right Column: Chat Interface */
+        .chat-module {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-dim);
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            min-height: 600px;
-            position: relative;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
         }
 
-        .console-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
+        .chat-head {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-dim);
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.01);
         }
 
-        .console-title {
-            font-family: 'Outfit', sans-serif;
+        .chat-title {
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .messages-area {
+        .chat-body {
             flex: 1;
-            padding: 2rem;
+            padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 24px;
         }
 
-        .msg-bubble {
+        /* Message Bubbles - Refined */
+        .bubble-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
             max-width: 85%;
-            padding: 1.5rem;
-            border-radius: 18px;
-            line-height: 1.6;
-            font-size: 1rem;
             animation: fadeIn 0.3s ease;
         }
 
@@ -245,408 +372,289 @@
             }
         }
 
-        .msg-ai {
-            background: var(--bg-element);
-            border: 1px solid var(--border);
-            border-bottom-left-radius: 4px;
-            align-self: flex-start;
-            color: #ececf1;
+        .bubble-meta {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-left: 12px;
+            margin-bottom: 2px;
         }
 
-        .msg-user {
-            background: var(--primary);
-            color: #000;
-            font-weight: 500;
-            border-bottom-right-radius: 4px;
-            align-self: flex-end;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
-        }
-
-        .input-zone {
-            padding: 1.5rem;
-            border-top: 1px solid var(--border);
-            background: var(--bg-surface);
-        }
-
-        .input-wrapper {
+        .bubble {
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 13.5px;
+            line-height: 1.6;
             position: relative;
-            display: flex;
-            align-items: center;
         }
 
-        .chat-input {
-            width: 100%;
-            background: var(--bg-deep);
-            border: 1px solid var(--border);
-            padding: 1.2rem 4rem 1.2rem 1.5rem;
-            border-radius: 99px;
-            color: white;
-            font-family: 'Instrument Sans', sans-serif;
-            font-size: 1rem;
+        .b-ai {
+            align-self: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border-dim);
+            color: var(--text-main);
+            border-bottom-left-radius: 4px;
+        }
+
+        .b-user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid var(--border-dim);
+            background: var(--bg-card);
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-stereo {
+            flex: 1;
+            background: var(--bg-app);
+            border: 1px solid var(--border-dim);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: var(--font-ui);
+            font-size: 13px;
             transition: all 0.2s;
         }
 
-        .chat-input:focus {
+        .input-stereo:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 0 3px var(--primary-bg);
         }
 
-        .send-btn {
-            position: absolute;
-            right: 8px;
+        .btn-send {
             width: 44px;
             height: 44px;
-            background: var(--primary);
-            border: none;
-            border-radius: 50%;
+            background: var(--text-main);
             color: #000;
+            border: none;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 18px;
             cursor: pointer;
             transition: transform 0.2s;
         }
 
-        .send-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* --- 4. Right Sidebar (Tools & Actions) --- */
-        .right-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: var(--grid-gap);
-        }
-
-        .action-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .tool-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.02);
-            color: var(--text-main);
-            text-decoration: none;
-            margin-bottom: 0.8rem;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .tool-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--text-muted);
-        }
-
-        .tool-btn.primary {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
-            color: var(--primary);
-        }
-
-        .tool-btn.primary:hover {
-            background: rgba(16, 185, 129, 0.2);
-        }
-
-        .status-list {
-            margin-top: 5px;
-        }
-
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-muted);
-        }
-
-        .status-row:last-child {
-            border: none;
-        }
-
-        .status-active {
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        /* Markdown Styles */
-        .msg-ai strong {
-            color: var(--primary);
-        }
-
-        .msg-ai ul {
-            margin-left: 20px;
-            margin-bottom: 10px;
-        }
-
-        .loading-bar {
-            height: 2px;
-            width: 100%;
-            background: var(--bg-deep);
-            overflow: hidden;
-            display: none;
-            margin-bottom: 10px;
-        }
-
-        .loading-bar::after {
-            content: '';
-            display: block;
-            width: 40%;
-            height: 100%;
-            background: var(--primary);
-            animation: slide 1s infinite linear;
-        }
-
-        @keyframes slide {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(300%);
-            }
+        .btn-send:hover {
+            transform: scale(1.05);
         }
 
         /* Mobile */
-        @media (max-width: 1100px) {
-            .bento-container {
+        @media (max-width: 900px) {
+            .app-shell {
                 grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
             }
 
-            .stats-strip {
-                grid-template-columns: 1fr 1fr;
+            .sidebar {
+                display: none;
             }
 
-            .chat-console {
-                min-height: 500px;
+            .top-bar {
+                padding: 0 16px;
             }
+
+            .workspace {
+                grid-template-columns: 1fr;
+                padding: 16px;
+            }
+
+            .metrics-stack {
+                display: none;
+            }
+
+            /* Focus on Chat only for mobile */
+        }
+
+        /* Markdown override */
+        .bubble strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .b-user strong {
+            color: #fff;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="bento-container">
+    <div class="app-shell">
 
-        <!-- HEADER -->
-        <header class="header-area">
-            <div class="brand">
-                <i class="ph-fill ph-circles-three-plus" style="font-size: 2rem; color: var(--primary);"></i>
-                <h1>Chef Edwin</h1>
-                <div class="version-badge">v2.0</div>
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-mark"><i class="ph-bold ph-chef-hat"></i></div>
+                <div class="logo-text">ChefEdwin<br><span
+                        style="color:var(--text-dim); font-weight:400; font-size:11px;">v1.0</span></div>
             </div>
 
-            <div class="user-status">
-                <div class="pulse-dot"></div>
-                <span style="font-size: 0.9rem; font-weight: 500;">{{ user.username }}</span>
-                <a href="{% url 'admin:index' %}" style="color: var(--text-muted); margin-left:8px;"><i
-                        class="ph-bold ph-gear"></i></a>
+            <span class="nav-label">Analisis</span>
+            <a href="#" class="nav-item active"><i class="ph ph-squares-four"></i> Datos</a>
+            <a href="#" class="nav-item"><i class="ph ph-chart-line-up"></i> Graficos</a>
+
+            <span class="nav-label">Gestion</span>
+            <a href="{% url 'admin:index' %}" class="nav-item"><i class="ph ph-users"></i> Alumnos</a>
+
+            <div class="user-block">
+                <div class="user-avatar">{{ user.username|slice:":1" }}</div>
+                <div style="flex:1">
+                    <div style="font-size:12px; font-weight:600;">{{ user.username }}</div>
+                    <div style="font-size:10px; color:var(--success);">● Activo</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- HEADER -->
+        <header class="top-bar">
+            <div class="breadcrumbs">
+                <span>Dashboard</span>
+                <i class="ph-bold ph-caret-right crumb-sep"></i>
+                <span class="crumb-current">Datos consolidados</span>
+            </div>
+            <div class="top-actions">
+                <div class="pill-status">
+                    <div class="pill-dot"></div> Sistema en linea
+                </div>
             </div>
         </header>
 
-        <!-- MAIN COLUMN (Stats + Chat) -->
-        <div class="main-column">
+        <!-- MAIN -->
+        <main class="workspace">
 
-            <!-- STATS STRIP -->
-            <div class="stats-strip">
-                <div class="kpi-card">
-                    <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa;">
-                        <i class="ph ph-student"></i>
-                    </div>
-                    <div class="kpi-value">{{ stats.total_students }}</div>
-                    <div class="kpi-label">Estudiantes</div>
+            <!-- LEFT: STATS COLUMN -->
+            <div class="metrics-stack">
+                <div class="card hero-metric">
+                    <div class="card-label">Total Alumnos</div>
+                    <div class="card-val">{{ stats.total_students }}</div>
+                    <div class="card-trend"><i class="ph-bold ph-trend-up"></i> +12% this week</div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #34d399;">
-                        <i class="ph ph-pulse"></i>
-                    </div>
-                    <div class="kpi-value">{{ stats.active_students }}</div>
-                    <div class="kpi-label">Activos Hoy</div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
-                        <i class="ph ph-smiley-wink"></i>
-                    </div>
-                    <div class="kpi-value">{{ stats.total_conversations }}</div>
-                    <div class="kpi-label">Conversaciones</div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.1); color: #a78bfa;">
-                        <i class="ph ph-fire"></i>
-                    </div>
-                    <div class="kpi-value" style="font-size: 1.5rem;">{{ stats.top_trend }}</div>
-                    <div class="kpi-label">Tendencia</div>
-                </div>
-            </div>
-
-            <!-- CHAT CONSOLE -->
-            <div class="chat-console">
-                <div class="console-header">
-                    <div class="console-title">
-                        <i class="ph-duotone ph-brain" style="color: var(--primary); font-size: 1.4rem;"></i>
-                        AI Research Assistant
-                    </div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted);">
-                        Accessing {{ stats.total_conversations }} records
+                <div class="card">
+                    <div class="card-label">Active Nodes</div>
+                    <div class="card-val">{{ stats.active_students }}</div>
+                    <div class="card-trend" style="color:var(--text-sec);"><i class="ph-fill ph-clock"></i> Real-time
                     </div>
                 </div>
 
-                <div class="loading-bar" id="loadingBar"></div>
-
-                <div class="messages-area" id="chatMessages">
-                    <div class="msg-bubble msg-ai">
-                        <strong>Sistema Iniciado.</strong><br>
-                        Hola {{ user.username }}, he procesado las métricas de hoy. ¿En qué puedo profundizar?
-                    </div>
+                <div class="card">
+                    <div class="card-label">Conversaciones</div>
+                    <div class="card-val">{{ stats.total_conversations }}</div>
                 </div>
 
-                <div class="input-zone">
-                    <div class="input-wrapper">
-                        <input type="text" id="chatInput" class="chat-input"
-                            placeholder="Pregunta sobre el rendimiento de los estudiantes...">
-                        <button id="sendBtn" class="send-btn"><i class="ph-bold ph-paper-plane-right"></i></button>
+                <div class="card">
+                    <div class="card-label">Top</div>
+                    <div style="font-size:18px; font-weight:600;">{{ stats.top_trend }}</div>
+                    <div class="card-trend" style="color:var(--warning);">Atencion requerida</div>
+                </div>
+
+                <div style="margin-top:24px;">
+                    <div class="card-label" style="margin-bottom:12px;">QUICK TOOLS</div>
+                    <div class="tools-list">
+                        <a href="{% url 'export_pdf' %}" class="tool-row"><i class="ph-bold ph-file-pdf"></i>Generador
+                            PDF</a>
+                        <a href="{% url 'export_csv' %}" class="tool-row"><i class="ph-bold ph-table"></i> Generador
+                            CSV</a>
                     </div>
                 </div>
             </div>
 
-        </div>
-
-        <!-- RIGHT SIDEBAR (Actions) -->
-        <aside class="right-sidebar">
-
-            <!-- Tools Panel -->
-            <div class="action-card">
-                <div class="section-title">Herramientas</div>
-                <a href="{% url 'export_pdf' %}" class="tool-btn primary">
-                    <i class="ph-bold ph-file-pdf"></i> Reporte PDF
-                </a>
-                <a href="{% url 'export_csv' %}" class="tool-btn">
-                    <i class="ph-bold ph-table"></i> Exportar CSV
-                </a>
-
-            </div>
-
-            <!-- System Status -->
-            <div class="action-card">
-                <div class="section-title">Estado del Sistema</div>
-                <div class="status-list">
-                    <div class="status-row">
-                        <span>Base de datos</span>
-                        <span class="status-active">conectado</span>
+            <!-- RIGHT: CHAT INTERFACE -->
+            <div class="chat-module">
+                <div class="chat-head">
+                    <div class="chat-title">
+                        <i class="ph-duotone ph-sparkle" style="color:var(--primary);"></i> ChefEdwin v1.0
                     </div>
-                    <div class="status-row">
-                        <span>Twilio API</span>
-                        <span class="status-active">Activo</span>
+                    <i class="ph-bold ph-dots-three" style="color:var(--text-dim); cursor:pointer;"></i>
+                </div>
+
+                <div class="chat-body" id="chatMessages">
+                    <div class="bubble-group b-ai">
+                        <div class="bubble-meta">ChefEdwin v1.0</div>
+                        <div class="bubble">
+                            <strong>preparado</strong><br>
+                            Conectado a {{ stats.total_conversations }} conversaciones.
+                            Puedo ayudarte a analizar los datos de tus estudiantes.
+                        </div>
                     </div>
-                    <div class="status-row">
-                        <span>Gemini 1.5</span>
-                        <span class="status-active">vivo</span>
-                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" class="input-stereo" placeholder="Type your research query...">
+                    <button id="sendBtn" class="btn-send"><i class="ph-bold ph-arrow-right"></i></button>
                 </div>
             </div>
 
-
-
-        </aside>
-
+        </main>
     </div>
 
-    <!-- Scripts -->
+    <!-- JS Logic -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
-        const loadingBar = document.getElementById('loadingBar');
 
-        // Allow 'Enter' to send
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Click to send
         sendBtn.addEventListener('click', sendMessage);
 
         async function sendMessage() {
             const question = chatInput.value.trim();
             if (!question) return;
 
-            // 1. Add User Message
+            // User
             addMessage(question, 'user');
             chatInput.value = '';
 
-            // 2. Show Loading
-            loadingBar.style.display = 'block';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // AI Loading
+            const loadId = addMessage("Running analysis...", 'ai', true);
 
             try {
-                // 3. Backend Call
                 const response = await fetch('{% url "research_chat" %}', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
                     body: JSON.stringify({ question: question })
                 });
-
                 const data = await response.json();
 
-                // 4. Hide Loading
-                loadingBar.style.display = 'none';
-
-                // 5. Add AI Message
-                if (data.response) {
-                    addMessage(data.response, 'ai');
-                } else {
-                    addMessage("⚠️ No pude obtener una respuesta. Verifica la conexión.", 'ai');
-                }
+                updateMessage(loadId, data.response || "No response.");
             } catch (error) {
-                loadingBar.style.display = 'none';
-                addMessage("❌ Error de comunicación con el servidor.", 'ai');
+                updateMessage(loadId, "Connection Error.");
                 console.error(error);
             }
         }
 
-        function addMessage(text, type) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `msg-bubble msg-${type}`;
+        function addMessage(text, type, isLoad = false) {
+            const group = document.createElement('div');
+            group.className = `bubble-group b-${type}`;
+            const id = 'msg-' + Date.now();
 
-            if (type === 'ai') {
-                msgDiv.innerHTML = marked.parse(text);
-            } else {
-                msgDiv.textContent = text;
-            }
+            const meta = type === 'ai' ? `<div class="bubble-meta">ASSISTANT</div>` : '';
+            const content = isLoad ? `<span style="opacity:0.6">...</span>` : (type === 'ai' ? marked.parse(text) : text);
 
-            chatMessages.appendChild(msgDiv);
+            group.innerHTML = `${meta}<div class="bubble" id="${id}-content">${content}</div>`;
 
-            // Auto-scroll
-            setTimeout(() => {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 50);
+            chatMessages.appendChild(group);
+            setTimeout(() => { chatMessages.scrollTop = chatMessages.scrollHeight; }, 50);
+            return id + '-content';
+        }
+
+        function updateMessage(elemId, text) {
+            const el = document.getElementById(elemId);
+            if (el) el.innerHTML = marked.parse(text);
         }
     </script>
 </body>

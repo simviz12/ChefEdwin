@@ -63,7 +63,7 @@ def webhook(request):
             else:
                 response.message("🔒 Sistema Protegido.\nIntroduce tu contraseña personal para acceder.")
                 return HttpResponse(str(response), content_type='text/xml')
-        
+                
         # User is authenticated, proceed
         role = student.role
         print(f"DEBUG: Msg from {sender_number}, Role: {role}, Auth: True")

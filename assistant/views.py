@@ -364,6 +364,10 @@ def teacher_dashboard(request):
             'active_students': active_students,
             'top_trend': top_trend,
             'avg_impact': avg_impact,
+            # V1.0 Metrics Restored (Placeholders since DB stats simplified)
+            'sentiment_score': 0.0, 
+            'tech_vocabulary': "0%",
+            'total_conversations': ConversationLog.objects.count(), # Useful for chat welcome
         }
     }
     

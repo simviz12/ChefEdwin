@@ -5,38 +5,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chef Edwin | Director's Console</title>
-    <!-- Premium Fonts -->
+    <title>Chef Edwin | Command Center</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Outfit:wght@300;400;500;700;800&display=swap"
         rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Tilt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
 
     <style>
         :root {
-            /* V4 Super Premium Palette */
-            --primary-bg: #09090b;
-            --secondary-bg: #18191c;
+            /* V6 Future Dark Palette */
+            --bg-deep: #050505;
+            --bg-surface: #0f0f11;
+            --bg-element: #18181b;
 
-            /* Enhanced Emerald System */
-            --accent-color: #10b981;
-            --accent-dark: #059669;
-            --accent-glow: rgba(16, 185, 129, 0.4);
+            --primary: #10b981;
+            /* Emerald */
+            --primary-dim: #059669;
+            --primary-glow: rgba(16, 185, 129, 0.4);
 
-            /* Text */
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
 
-            /* V4 Glassmorphism */
-            --glass-bg: rgba(23, 23, 26, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.04);
-            --card-radius: 24px;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.12);
 
-            /* Shadows for Depth */
-            --shadow-subtle: 0 4px 10px rgba(0, 0, 0, 0.2);
-            --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+
+            --grid-gap: 24px;
         }
 
         * {
@@ -46,504 +49,538 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--primary-bg);
-            /* Deep Space Mesh Gradient */
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
-            color: var(--text-primary);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Instrument Sans', sans-serif;
             min-height: 100vh;
-            padding: 2.5rem;
-            line-height: 1.6;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+            /* Subtle grain or noise could go here */
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
+        .bento-container {
+            width: 100%;
+            max-width: 1600px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            /* Main Area vs Right Sidebar */
+            grid-template-rows: auto 1fr;
+            gap: var(--grid-gap);
         }
 
-        /* --- Header --- */
-        header {
+        /* --- 1. Header Area (Spans Full Width) --- */
+        .header-area {
+            grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3.5rem;
+            padding-bottom: 0.5rem;
         }
 
-        .logo-area {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
         }
 
-        .logo-area h1 {
+        .brand h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 3rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff 20%, #94a3b8 100%);
+            font-size: 2rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #fff, #a1a1aa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .badge-pro {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            padding: 5px 12px;
+        .version-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 4px 10px;
             border-radius: 99px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
         }
 
-        .user-pill {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.6rem 2rem;
-            border-radius: 99px;
-            border: 1px solid var(--glass-border);
+        .user-status {
             display: flex;
             align-items: center;
             gap: 12px;
-            backdrop-filter: blur(15px);
-            font-family: 'Outfit', sans-serif;
-            font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 99px;
         }
 
-        .user-pill:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
         }
 
-        /* --- Stats Grid (Enhanced) --- */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3.5rem;
-        }
+        /* --- 2. Stats Row (Inside Main Area usually, but here spanning top of Left Col) --- */
+        /* Let's make Stats span the MAIN column (Left), and Profile is on Right */
 
-        .stat-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid var(--glass-highlight);
-            border-radius: var(--card-radius);
-            padding: 2rem;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: var(--shadow-subtle);
-            backdrop-filter: blur(12px);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-float);
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(30, 30, 35, 0.7);
-        }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 16px;
+        .main-column {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 1.2rem;
+            flex-direction: column;
+            gap: var(--grid-gap);
         }
 
-        .stat-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1;
-            margin-bottom: 5px;
-            letter-spacing: -1px;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        /* --- Content Layout --- */
-        .content-layout {
+        .stats-strip {
             display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 2.5rem;
-            align-items: start;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
         }
 
-        /* --- Action Panel --- */
-        .action-panel {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-top: 1px solid var(--glass-highlight);
-            border-radius: var(--card-radius);
-            padding: 2.5rem;
-            position: sticky;
-            top: 2rem;
-            backdrop-filter: blur(20px);
-        }
-
-        .panel-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: #fff;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 1rem;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 1.2rem;
-            border-radius: 18px;
-            border: none;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            margin-bottom: 1rem;
-            font-size: 1.05rem;
+        .kpi-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .btn-primary {
-            background: #10b981;
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-light);
+            background: var(--bg-element);
+        }
+
+        .kpi-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .kpi-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- 3. Chat Console (Dominant Feature in Main Column) --- */
+        .chat-console {
+            flex: 1;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .console-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .console-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .messages-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .msg-bubble {
+            max-width: 85%;
+            padding: 1.5rem;
+            border-radius: 18px;
+            line-height: 1.6;
+            font-size: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .msg-ai {
+            background: var(--bg-element);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            color: #ececf1;
+        }
+
+        .msg-user {
+            background: var(--primary);
+            color: #000;
+            font-weight: 500;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .input-zone {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-surface);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: var(--bg-deep);
+            border: 1px solid var(--border);
+            padding: 1.2rem 4rem 1.2rem 1.5rem;
+            border-radius: 99px;
             color: white;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-family: 'Instrument Sans', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
-        .btn-primary:hover {
-            background: #059669;
-            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px);
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-primary);
-            border: 1px solid var(--glass-border);
+        .send-btn {
+            position: absolute;
+            right: 8px;
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- 4. Right Sidebar (Tools & Actions) --- */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--grid-gap);
+        }
+
+        .action-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .tool-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-main);
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-muted);
+        }
+
+        .tool-btn.primary {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: var(--primary);
+        }
+
+        .tool-btn.primary:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .status-list {
+            margin-top: 5px;
         }
 
         .status-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.9rem;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
         }
 
         .status-row:last-child {
             border: none;
         }
 
-        /* --- Chat Interface --- */
-        .chat-panel {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
-            display: flex;
-            flex-direction: column;
-            height: 750px;
-            box-shadow: var(--shadow-float);
+        .status-active {
+            color: var(--primary);
+            font-weight: 500;
         }
 
-        .chat-header {
-            padding: 2rem;
-            border-bottom: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.02);
+        /* Markdown Styles */
+        .msg-ai strong {
+            color: var(--primary);
         }
 
-        .chat-header h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .msg-ai ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
         }
 
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--accent-color);
-            position: relative;
+        .loading-bar {
+            height: 2px;
+            width: 100%;
+            background: var(--bg-deep);
+            overflow: hidden;
+            display: none;
+            margin-bottom: 10px;
         }
 
-        .status-dot::after {
+        .loading-bar::after {
             content: '';
-            position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border: 1px solid var(--accent-color);
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: pulse 2s infinite;
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: var(--primary);
+            animation: slide 1s infinite linear;
         }
 
-        @keyframes pulse {
+        @keyframes slide {
             0% {
-                transform: scale(1);
-                opacity: 0.5;
+                transform: translateX(-100%);
             }
 
             100% {
-                transform: scale(1.5);
-                opacity: 0;
+                transform: translateX(300%);
             }
         }
 
-        .chat-messages {
-            padding: 2.5rem;
-        }
-
-        .message {
-            max-width: 80%;
-            margin-bottom: 1.5rem;
-            padding: 1.5rem 2rem;
-            border-radius: 24px;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .message.ai {
-            background: rgba(40, 40, 45, 0.95);
-            border: 1px solid var(--glass-border);
-            border-bottom-left-radius: 4px;
-            margin-right: auto;
-            color: var(--text-primary);
-        }
-
-        .message.user {
-            background: #10b981;
-            /* Pure Emerald */
-            border-bottom-right-radius: 4px;
-            margin-left: auto;
-            color: white;
-            box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.3);
-        }
-
-        .chat-footer {
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            gap: 1.2rem;
-        }
-
-        #chatInput {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            padding: 1.2rem 2rem;
-            border-radius: 99px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
-        }
-
-        #chatInput:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-        }
-
-        #sendBtn {
-            width: 60px;
-            height: 60px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #sendBtn:hover {
-            transform: scale(1.1) rotate(-10deg);
-        }
-
-        /* Media Queries */
-        @media (max-width: 1000px) {
-            .content-layout {
+        /* Mobile */
+        @media (max-width: 1100px) {
+            .bento-container {
                 grid-template-columns: 1fr;
             }
 
-            .action-panel {
-                position: static;
-                margin-bottom: 2rem;
+            .stats-strip {
+                grid-template-columns: 1fr 1fr;
             }
 
-            .chat-panel {
-                height: 600px;
+            .chat-console {
+                min-height: 500px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="logo-area">
+
+    <div class="bento-container">
+
+        <!-- HEADER -->
+        <header class="header-area">
+            <div class="brand">
+                <i class="ph-fill ph-circles-three-plus" style="font-size: 2rem; color: var(--primary);"></i>
                 <h1>Chef Edwin</h1>
-                <div class="badge-pro">V1.0</div>
+                <div class="version-badge">v2.0</div>
             </div>
-            <div class="user-pill">
-                <i class="ph-fill ph-circle" style="color: #10b981;"></i>
-                <span>{{ user.username }}</span>
-                <span style="opacity: 0.2;">|</span>
-                <a href="{% url 'admin:index' %}" style="color: white; text-decoration: none;">
-                    <i class="ph ph-gear-six" style="font-size: 1.4rem;"></i>
-                </a>
+
+            <div class="user-status">
+                <div class="pulse-dot"></div>
+                <span style="font-size: 0.9rem; font-weight: 500;">{{ user.username }}</span>
+                <a href="{% url 'admin:index' %}" style="color: var(--text-muted); margin-left:8px;"><i
+                        class="ph-bold ph-gear"></i></a>
             </div>
         </header>
 
-        <!-- Stats Grid with 3D Tilt -->
-        <div class="stats-grid">
-            <!-- Card 1 -->
-            <div class="stat-card" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
-                <div class="stat-icon" style="background: rgba(37, 99, 235, 0.1); color: #3b82f6;">
-                    <i class="ph ph-users-three"></i>
+        <!-- MAIN COLUMN (Stats + Chat) -->
+        <div class="main-column">
+
+            <!-- STATS STRIP -->
+            <div class="stats-strip">
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.1); color: #60a5fa;">
+                        <i class="ph ph-student"></i>
+                    </div>
+                    <div class="kpi-value">{{ stats.total_students }}</div>
+                    <div class="kpi-label">Estudiantes</div>
                 </div>
-                <div class="stat-value">{{ stats.total_students }}</div>
-                <div class="stat-label">Total Estudiantes</div>
-            </div>
 
-            <!-- Card 2 -->
-            <div class="stat-card" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
-                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
-                    <i class="ph ph-lightning"></i>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: #34d399;">
+                        <i class="ph ph-pulse"></i>
+                    </div>
+                    <div class="kpi-value">{{ stats.active_students }}</div>
+                    <div class="kpi-label">Activos Hoy</div>
                 </div>
-                <div class="stat-value">{{ stats.active_students }}</div>
-                <div class="stat-label">Usuarios Activos</div>
-            </div>
 
-            <!-- Card 3 -->
-            <div class="stat-card" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
-                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                    <i class="ph ph-smiley"></i>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.1); color: #fbbf24;">
+                        <i class="ph ph-smiley-wink"></i>
+                    </div>
+                    <div class="kpi-value">{{ stats.total_conversations }}</div>
+                    <div class="kpi-label">Conversaciones</div>
                 </div>
-                <div class="stat-value">{{ stats.sentiment_score }}<span
-                        style="font-size: 1.5rem; opacity: 0.5;">/10</span></div>
-                <div class="stat-label">Satisfacción</div>
-            </div>
 
-            <!-- Card 4 -->
-            <div class="stat-card" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
-                <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
-                    <i class="ph ph-fire"></i>
-                </div>
-                <div class="stat-value" style="font-size: 2.2rem;">{{ stats.top_trend }}</div>
-                <div class="stat-label">Tendencia</div>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="content-layout">
-
-            <!-- Left Panel: Actions & Charts -->
-            <div class="action-panel">
-                <h2 class="panel-title">DATOS</h2>
-
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <a href="{% url 'export_pdf' %}" class="btn btn-primary">
-                        <i class="ph ph-file-pdf"></i> Reporte PDF
-                    </a>
-                    <a href="{% url 'export_csv' %}" class="btn btn-secondary">
-                        <i class="ph ph-file-csv"></i> CSV Data
-                    </a>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.1); color: #a78bfa;">
+                        <i class="ph ph-fire"></i>
+                    </div>
+                    <div class="kpi-value" style="font-size: 1.5rem;">{{ stats.top_trend }}</div>
+                    <div class="kpi-label">Tendencia</div>
                 </div>
             </div>
 
-            <!-- Right Panel: AI Chat -->
-            <div class="chat-panel">
-                <div class="chat-header">
-                    <h3>
-                        <span class="status-dot"></span>
-                        Director de Investigación (IA)
-                    </h3>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 5px;">
-                        Analista de datos pedagógicos en tiempo real.
-                    </p>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message ai">
-                        👋 ¡Hola Chef! Soy tu analista de datos. <br>
-                        Tengo acceso a <strong>{{ stats.total_conversations }} interacciones</strong> de estudiantes.
-                        <br><br>
-                        ¿Qué deseas investigar hoy?
+            <!-- CHAT CONSOLE -->
+            <div class="chat-console">
+                <div class="console-header">
+                    <div class="console-title">
+                        <i class="ph-duotone ph-brain" style="color: var(--primary); font-size: 1.4rem;"></i>
+                        AI Research Assistant
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">
+                        Accessing {{ stats.total_conversations }} records
                     </div>
                 </div>
 
-                <div class="loading-indicator" id="loading">
-                    🔄 Analizando patrones en la base de datos...
+                <div class="loading-bar" id="loadingBar"></div>
+
+                <div class="messages-area" id="chatMessages">
+                    <div class="msg-bubble msg-ai">
+                        <strong>Sistema Iniciado.</strong><br>
+                        Hola {{ user.username }}, he procesado las métricas de hoy. ¿En qué puedo profundizar?
+                    </div>
                 </div>
 
-                <div class="chat-footer">
-                    <input type="text" id="chatInput"
-                        placeholder="Ej: 'Analiza por qué los alumnos fallan en repostería'...">
-                    <button id="sendBtn">➤</button>
+                <div class="input-zone">
+                    <div class="input-wrapper">
+                        <input type="text" id="chatInput" class="chat-input"
+                            placeholder="Pregunta sobre el rendimiento de los estudiantes...">
+                        <button id="sendBtn" class="send-btn"><i class="ph-bold ph-paper-plane-right"></i></button>
+                    </div>
                 </div>
             </div>
 
         </div>
+
+        <!-- RIGHT SIDEBAR (Actions) -->
+        <aside class="right-sidebar">
+
+            <!-- Tools Panel -->
+            <div class="action-card">
+                <div class="section-title">Herramientas</div>
+                <a href="{% url 'export_pdf' %}" class="tool-btn primary">
+                    <i class="ph-bold ph-file-pdf"></i> Reporte PDF
+                </a>
+                <a href="{% url 'export_csv' %}" class="tool-btn">
+                    <i class="ph-bold ph-table"></i> Exportar CSV
+                </a>
+
+            </div>
+
+            <!-- System Status -->
+            <div class="action-card">
+                <div class="section-title">Estado del Sistema</div>
+                <div class="status-list">
+                    <div class="status-row">
+                        <span>Base de datos</span>
+                        <span class="status-active">conectado</span>
+                    </div>
+                    <div class="status-row">
+                        <span>Twilio API</span>
+                        <span class="status-active">Activo</span>
+                    </div>
+                    <div class="status-row">
+                        <span>Gemini 1.5</span>
+                        <span class="status-active">vivo</span>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </aside>
+
     </div>
 
-    <!-- Markdown Parser -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
     <script>
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
-        const loading = document.getElementById('loading');
+        const loadingBar = document.getElementById('loadingBar');
 
         // Allow 'Enter' to send
         chatInput.addEventListener('keypress', (e) => {
@@ -562,7 +599,8 @@
             chatInput.value = '';
 
             // 2. Show Loading
-            loading.style.display = 'block';
+            loadingBar.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
                 // 3. Backend Call
@@ -578,7 +616,7 @@
                 const data = await response.json();
 
                 // 4. Hide Loading
-                loading.style.display = 'none';
+                loadingBar.style.display = 'none';
 
                 // 5. Add AI Message
                 if (data.response) {
@@ -587,7 +625,7 @@
                     addMessage("⚠️ No pude obtener una respuesta. Verifica la conexión.", 'ai');
                 }
             } catch (error) {
-                loading.style.display = 'none';
+                loadingBar.style.display = 'none';
                 addMessage("❌ Error de comunicación con el servidor.", 'ai');
                 console.error(error);
             }
@@ -595,19 +633,17 @@
 
         function addMessage(text, type) {
             const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${type}`;
+            msgDiv.className = `msg-bubble msg-${type}`;
 
             if (type === 'ai') {
-                // Render Markdown for AI
                 msgDiv.innerHTML = marked.parse(text);
             } else {
-                // Plain text for User
                 msgDiv.textContent = text;
             }
 
             chatMessages.appendChild(msgDiv);
 
-            // Auto-scroll to bottom
+            // Auto-scroll
             setTimeout(() => {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 50);

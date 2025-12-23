@@ -432,20 +432,20 @@
             <!-- Card 3 -->
             <div class="stat-card" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
                 <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
-                    <i class="ph ph-trend-up"></i>
+                    <i class="ph ph-smiley"></i>
                 </div>
                 <div class="stat-value">{{ stats.sentiment_score }}<span
                         style="font-size: 1.5rem; opacity: 0.5;">/10</span></div>
-                <div class="stat-label">Sentimiento IA</div>
+                <div class="stat-label">Satisfacción</div>
             </div>
 
             <!-- Card 4 -->
             <div class="stat-card" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
                 <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
-                    <i class="ph ph-brain"></i>
+                    <i class="ph ph-fire"></i>
                 </div>
-                <div class="stat-value">{{ stats.tech_vocabulary }}</div>
-                <div class="stat-label">Nivel Técnico</div>
+                <div class="stat-value" style="font-size: 2.2rem;">{{ stats.top_trend }}</div>
+                <div class="stat-label">Tendencia</div>
             </div>
         </div>
 

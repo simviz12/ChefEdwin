@@ -15,16 +15,28 @@
 
     <style>
         :root {
-            --primary-bg: #0f172a;
-            --secondary-bg: #1e293b;
+            /* V4 Super Premium Palette */
+            --primary-bg: #09090b;
+            --secondary-bg: #18191c;
+
+            /* Enhanced Emerald System */
             --accent-color: #10b981;
-            /* Emerald */
-            --accent-glow: rgba(16, 185, 129, 0.3);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --card-radius: 20px;
+            --accent-dark: #059669;
+            --accent-glow: rgba(16, 185, 129, 0.4);
+
+            /* Text */
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+
+            /* V4 Glassmorphism */
+            --glass-bg: rgba(23, 23, 26, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.04);
+            --card-radius: 24px;
+
+            /* Shadows for Depth */
+            --shadow-subtle: 0 4px 10px rgba(0, 0, 0, 0.2);
+            --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
         }
 
         * {
@@ -36,18 +48,22 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--primary-bg);
+            /* Deep Space Mesh Gradient */
             background-image:
-                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 2rem;
+            padding: 2.5rem;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
         /* --- Header --- */
@@ -55,212 +71,280 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
-            padding: 1rem 0;
+            margin-bottom: 3.5rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .logo-area h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 20%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge-pro {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            padding: 5px 12px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+            letter-spacing: 1px;
         }
 
         .user-pill {
-            background: var(--glass-bg);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.6rem 2rem;
+            border-radius: 99px;
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
+            gap: 12px;
+            backdrop-filter: blur(15px);
             font-family: 'Outfit', sans-serif;
             font-weight: 500;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- Stats Grid --- */
+        .user-pill:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* --- Stats Grid (Enhanced) --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3.5rem;
         }
 
         .stat-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
             border-radius: var(--card-radius);
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 2rem;
             position: relative;
-            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-subtle);
+            backdrop-filter: blur(12px);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-float);
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 30, 35, 0.7);
         }
 
-        /* Subtle Glow Effect on Hover */
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at top right, var(--accent-glow), transparent 40%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .stat-card:hover::after {
-            opacity: 1;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
         }
 
         .stat-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 3.2rem;
             font-weight: 700;
             color: #fff;
+            line-height: 1;
+            margin-bottom: 5px;
+            letter-spacing: -1px;
         }
 
-        /* --- Main Content Layout --- */
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* --- Content Layout --- */
         .content-layout {
             display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 2rem;
+            grid-template-columns: 380px 1fr;
+            gap: 2.5rem;
             align-items: start;
         }
 
-        /* --- Reports Panel (Left) --- */
+        /* --- Action Panel --- */
         .action-panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
+            border-top: 1px solid var(--glass-highlight);
             border-radius: var(--card-radius);
-            padding: 2rem;
+            padding: 2.5rem;
             position: sticky;
             top: 2rem;
+            backdrop-filter: blur(20px);
         }
 
         .panel-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             color: #fff;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
         }
 
         .btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            padding: 1rem;
-            border-radius: 12px;
+            padding: 1.2rem;
+            border-radius: 18px;
             border: none;
             font-family: 'Outfit', sans-serif;
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             margin-bottom: 1rem;
-            font-size: 1rem;
+            font-size: 1.05rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: #10b981;
             color: white;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            /* Transparent style */
+            background: rgba(255, 255, 255, 0.03);
             color: var(--text-primary);
             border: 1px solid var(--glass-border);
         }
 
-        .btn:hover {
-            transform: scale(1.02);
-            filter: brightness(1.1);
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
-        .btn-primary:active {
-            transform: scale(0.98);
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        /* --- Chat Interface (Right) --- */
+        .status-row:last-child {
+            border: none;
+        }
+
+        /* --- Chat Interface --- */
         .chat-panel {
-            background: rgba(15, 23, 42, 0.6);
-            /* Slightly darker for contrast */
-            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: var(--card-radius);
             display: flex;
             flex-direction: column;
-            height: 700px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            height: 750px;
+            box-shadow: var(--shadow-float);
         }
 
         .chat-header {
-            padding: 1.5rem;
+            padding: 2rem;
             border-bottom: 1px solid var(--glass-border);
-            background: rgba(30, 41, 59, 0.4);
-            border-radius: var(--card-radius) var(--card-radius) 0 0;
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .chat-header h3 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background-color: var(--accent-color);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-color);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-
-        .message {
-            max-width: 85%;
-            margin-bottom: 1.5rem;
-            padding: 1rem 1.5rem;
-            border-radius: 18px;
-            font-size: 1rem;
-            line-height: 1.6;
+            box-shadow: 0 0 15px var(--accent-color);
             position: relative;
         }
 
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 1px solid var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .chat-messages {
+            padding: 2.5rem;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-radius: 24px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
         .message.ai {
-            background: rgba(30, 41, 59, 0.8);
+            background: rgba(40, 40, 45, 0.95);
             border: 1px solid var(--glass-border);
             border-bottom-left-radius: 4px;
             margin-right: auto;
@@ -268,120 +352,70 @@
         }
 
         .message.user {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #10b981;
+            /* Pure Emerald */
             border-bottom-right-radius: 4px;
             margin-left: auto;
             color: white;
-            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
-        }
-
-        /* Markdown Styling inside Messages */
-        .message.ai h1,
-        .message.ai h2,
-        .message.ai h3 {
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            font-family: 'Outfit', sans-serif;
-            color: #fff;
-        }
-
-        .message.ai ul,
-        .message.ai ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .message.ai strong {
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .message.ai p {
-            margin-bottom: 0.5rem;
+            box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.3);
         }
 
         .chat-footer {
-            padding: 1.5rem;
-            background: rgba(30, 41, 59, 0.4);
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
             border-top: 1px solid var(--glass-border);
-            border-radius: 0 0 var(--card-radius) var(--card-radius);
             display: flex;
-            gap: 1rem;
+            gap: 1.2rem;
         }
 
         #chatInput {
             flex: 1;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
+            padding: 1.2rem 2rem;
+            border-radius: 99px;
             color: white;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: 1.05rem;
             transition: all 0.3s ease;
         }
 
         #chatInput:focus {
             outline: none;
             border-color: var(--accent-color);
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
         #sendBtn {
+            width: 60px;
+            height: 60px;
             background: var(--accent-color);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
             border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         #sendBtn:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(-10deg);
         }
 
-        .loading-indicator {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-style: italic;
-            margin-top: -10px;
-            margin-bottom: 10px;
-            display: none;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
+        /* Media Queries */
+        @media (max-width: 1000px) {
             .content-layout {
                 grid-template-columns: 1fr;
             }
 
             .action-panel {
                 position: static;
+                margin-bottom: 2rem;
             }
 
             .chat-panel {
@@ -456,10 +490,6 @@
             <div class="action-panel">
                 <h2 class="panel-title">DATOS</h2>
 
-                <button class="btn"
-                    style="background: rgba(255,255,255,0.05); color: #10b981; border: 1px solid rgba(16,185,129,0.2); cursor: not-allowed; opacity: 0.7;">
-                    <i class="ph ph-arrows-clockwise"></i> calcular Análisis IA
-                </button>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <a href="{% url 'export_pdf' %}" class="btn btn-primary">
@@ -586,4 +616,3 @@
 </body>
 
 </html>
-a

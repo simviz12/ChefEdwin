@@ -1,9 +1,11 @@
+import logging
 import google.generativeai as genai
 from django.conf import settings
 import requests
 from PIL import Image
 from io import BytesIO
 
+logger = logging.getLogger(__name__)
 
 PROMPT_TEACHER = """
 Eres 'Chef Edwin', el Director de Investigación Institucional. Tu función es la de un analista de datos avanzado.
@@ -50,7 +52,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
         
         # --- 0. AUDIO PROCESSING (STT) ---
         if audio_url:
-            print(f"🎤 Audio detected: {audio_url}")
+            logger.info(f"🎤 Audio detected: {audio_url}")
             try:
                 # Download audio
                 # Twilio media URLs require Basic Auth
@@ -60,7 +62,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                     import tempfile
                     
                     content_type = audio_response.headers.get('Content-Type', 'audio/ogg')
-                    print(f"Audio Content-Type: {content_type}")
+                    logger.debug(f"Audio Content-Type: {content_type}")
 
                     # Create a temporary file for the audio
                     # Use header to determine suffix if possible, else default to .ogg
@@ -72,7 +74,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                         tmp_file.write(audio_response.content)
                         tmp_file_path = tmp_file.name
 
-                    print(f"Transcribing audio from {tmp_file_path}...")
+                    logger.debug(f"Transcribing audio from {tmp_file_path}...")
                     
                     # Use Gemini to transcribe
                     model_stt = genai.GenerativeModel('gemini-2.5-flash')
@@ -84,7 +86,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                     result = model_stt.generate_content([myfile, "Transcribe this audio exactly. Do not add any conversational text."])
                     
                     transcription = result.text.strip()
-                    print(f"🗣️ Transcription: {transcription}")
+                    logger.info(f"🗣️ Transcription: {transcription}")
                     
                     if not transcription:
                         user_message = "🔴 [ERROR]: El usuario envió un audio pero no pude transcribirlo. Pídele que lo intente de nuevo."
@@ -97,11 +99,11 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                             user_message += f"\n[TRANSCRIPCIÓN DE AUDIO]: {transcription}"
                         
                 else:
-                    print(f"Failed to download audio: {audio_response.status_code}")
+                    logger.error(f"Failed to download audio: {audio_response.status_code}")
                     user_message = f"🔴 [ERROR DEL SISTEMA]: Falló la descarga del audio (Código {audio_response.status_code}). Verifica las credenciales de Twilio en Render."
 
             except Exception as audio_err:
-                print(f"❌ Error processing audio: {audio_err}")
+                logger.error(f"❌ Error processing audio: {audio_err}")
                 return "Tuve un problema escuchando tu audio. ¿Podrías escribirlo?"
         # ---------------------------------
         
@@ -136,7 +138,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                 pass 
 
         except Exception as db_err:
-            print(f"Warning: Could not fetch DB history: {db_err}")
+            logger.warning(f"Could not fetch DB history: {db_err}")
         # ---------------------------------
 
         # --- PREPARE CONTENT (Before Loop) ---
@@ -158,7 +160,7 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
         content = [f"{context_prompt}\n\nPREGUNTA DEL USUARIO:\n{user_message}"]
         
         if image_url:
-            print(f"Downloading image from {image_url}...")
+            logger.info(f"Downloading image from {image_url}...")
             try:
                 # Twilio media URLs require Basic Auth (Account SID + Auth Token)
                 img_response = requests.get(image_url, auth=(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN))
@@ -166,12 +168,12 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
                 if img_response.status_code == 200:
                     image_data = Image.open(BytesIO(img_response.content))
                     content.append(image_data)
-                    print("Image downloaded and attached.")
+                    logger.debug("Image downloaded and attached.")
                 else:
-                    print(f"Failed to download image: {img_response.status_code}")
+                    logger.error(f"Failed to download image: {img_response.status_code}")
                     user_message += f"\n[ERROR DEL SISTEMA]: El usuario intentó enviar una imagen pero falló la descarga (Código {img_response.status_code}). Posible error de credenciales Twilio."
             except Exception as img_err:
-                print(f"Error processing image: {img_err}")
+                logger.error(f"Error processing image: {img_err}")
         # -------------------------------------
 
         # List of models to try in order of preference/likelihood of quota
@@ -184,14 +186,14 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
 
         last_error = None
         for model_name in candidate_models:
-            print(f"🔄 Attempting with model: {model_name}...")
+            logger.debug(f"🔄 Attempting with model: {model_name}...")
             try:
                 model = genai.GenerativeModel(model_name)
                 response = model.generate_content(content)
-                print(f"✅ Success with {model_name}!")
+                logger.info(f"✅ Success with {model_name}!")
                 return response.text
             except Exception as e:
-                print(f"❌ Failed with {model_name}: {e}")
+                logger.warning(f"❌ Failed with {model_name}: {e}")
                 last_error = e
                 # Continue to next model
         
@@ -199,5 +201,5 @@ def get_chef_response(user_message, image_url=None, role='student', sender_numbe
         raise last_error
 
     except Exception as e:
-        print(f"All models failed. Last error: {e}")
+        logger.critical(f"All models failed. Last error: {e}")
         return "👨‍🍳 ¡Ups! Estoy sobrecargado de pedidos (Límite de cuota alcanzado en Google). Intenta mañana cuando se recarguen mis energías."

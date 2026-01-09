@@ -372,255 +372,242 @@
                 <div class="brand-text">ChefEdwin</div>
             </div>
 
-            <a href="{% url 'teacher_dashboard' %}" class="nav-item active">
+            <a href="{% url 'teacher_dashboard' %}" class="nav-item">
                 <i class="ph-bold ph-chats-circle"></i> Vista General
             </a>
-            <a href="{% url 'teacher_stats' %}" class="nav-item">
+            <a href="{% url 'teacher_stats' %}" class="nav-item active">
                 <i class="ph-bold ph-chart-bar"></i> Estadísticas
-            </a>
-            <a href="#students" class="nav-item">
-                <i class="ph-bold ph-users"></i> Alumnos
             </a>
             <a href="{% url 'admin:index' %}" class="nav-item">
                 <i class="ph-bold ph-gear"></i> Sistema
             </a>
 
             <div style="flex:1"></div>
+
+            <div style="padding: 16px; background: var(--bg-hover); border-radius: 12px;">
+                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">EXPORTAR DATOS</div>
+                <div style="display: flex; gap: 8px;">
+                    <a href="{% url 'export_pdf' %}" style="text-decoration:none; color:white; font-size:20px;"><i
+                            class="ph-bold ph-file-pdf"></i></a>
+                    <a href="{% url 'export_csv' %}" style="text-decoration:none; color:white; font-size:20px;"><i
+                            class="ph-bold ph-file-csv"></i></a>
+                </div>
+            </div>
         </nav>
 
         <!-- MAIN -->
-        <main class="main-content"
-            style="height:100vh; display:flex; flex-direction:column; padding:0; overflow:hidden;">
+        <main class="main-content">
 
-            <!-- HEADER -->
-            <header class="header"
-                style="padding: 24px 32px; border-bottom:1px solid var(--border-subtle); background:var(--bg-body);">
+            <header class="header">
                 <div class="page-title">
-                    <h1>Dashboard > <span style="color:var(--text-muted)">Datos consolidados</span></h1>
+                    <h1>Resumen Ejecutivo</h1>
+                    <p>Métricas de aprendizaje y uso en tiempo real.</p>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <div class="status-pill active"
-                        style="padding: 6px 12px; border-radius: 20px; font-size: 12px; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">
-                        <span
-                            style="width:6px; height:6px; background:#10b981; border-radius:50%; display:inline-block; margin-right:6px;"></span>
-                        Sistema en línea
-                    </div>
+                    <span style="width:8px; height:8px; background:var(--accent-teal); border-radius:50%;"></span>
+                    <span style="font-size:13px; font-weight:500;">Sistema Operativo</span>
                 </div>
             </header>
 
-            <!-- HYBRID GRID LAYOUT -->
-            <div style="flex:1; display:flex; width:100%; overflow:hidden;">
-
-                <!-- LEFT COLUMN: METRICS & TOOLS (30%) -->
-                <div
-                    style="width:320px; min-width:320px; border-right:1px solid var(--border-subtle); display:flex; flex-direction:column; padding:24px; gap:24px; overflow-y:auto;">
-
-                    <!-- Metric Cards -->
-                    <div class="metric-card-mini">
-                        <div class="label">TOTAL ALUMNOS</div>
-                        <div class="value">{{ summary.total_students }}</div>
-                        <div class="trend positive">↗ +12% this week</div>
-                    </div>
-
-                    <div class="metric-card-mini">
-                        <div class="label">ACTIVE NODES</div>
-                        <div class="value">{{ summary.active_nodes }}</div>
-                        <div class="trend neutral">● Real-time</div>
-                    </div>
-
-                    <div class="metric-card-mini">
-                        <div class="label">CONVERSACIONES</div>
-                        <div class="value">{{ summary.total_conversations }}</div>
-                    </div>
-
-                    <div class="metric-card-mini">
-                        <div class="label">TOP</div>
-                        <div class="value" style="font-size:20px;">{{ summary.top_topic }}</div>
-                        <div class="trend warning">Atencion requerida</div>
-                    </div>
-
-                    <div style="flex:1"></div>
-
-                    <!-- Quick Tools -->
-                    <div>
-                        <div class="label" style="margin-bottom:12px;">QUICK TOOLS</div>
-                        <a href="{% url 'export_pdf' %}" class="tool-btn">
-                            <i class="ph-bold ph-file-pdf"></i> Generador PDF
-                        </a>
-                        <a href="{% url 'export_csv' %}" class="tool-btn">
-                            <i class="ph-bold ph-file-csv"></i> Generador CSV
-                        </a>
-                    </div>
-
+            <!-- METRICS -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <i class="ph-duotone ph-users metric-icon"></i>
+                    <div class="metric-label">Total Alumnos</div>
+                    <div class="metric-value">{{ stats.total_students }}</div>
+                    <div class="metric-trend">+ Activos: {{ stats.active_students }}</div>
                 </div>
 
-                <!-- RIGHT COLUMN: CHAT INTERFACE (70%) -->
-                <div style="flex:1; display:flex; flex-direction:column; background:var(--bg-card);">
-
-                    <!-- Chat Status Bar -->
-                    <div
-                        style="padding:16px 24px; border-bottom:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <i class="ph-duotone ph-sparkle" style="color:var(--primary);"></i>
-                            <span style="font-weight:600;">ChefEdwin v1.0</span>
-                        </div>
-                        <i class="ph-bold ph-dots-three"></i>
+                <div class="metric-card">
+                    <i class="ph-duotone ph-chat-circle-dots metric-icon"></i>
+                    <div class="metric-label">Conversaciones</div>
+                    <div class="metric-value">{{ stats.total_conversations }}</div>
+                    <div class="metric-trend" style="background:rgba(129,140,248,0.2); color:var(--primary);">
+                        Lifetime
                     </div>
+                </div>
 
-                    <!-- Messages -->
-                    <div id="chatMessages"
-                        style="flex:1; padding:24px; overflow-y:auto; display:flex; flex-direction:column; gap:16px;">
+                <div class="metric-card">
+                    <i class="ph-duotone ph-lightning metric-icon"></i>
+                    <div class="metric-label">Engagement</div>
+                    <div class="metric-value">{{ stats.engagement_score }}</div>
+                    <div class="metric-trend">Msgs/Alumno</div>
+                </div>
 
-                        <!-- Welcome Message -->
-                        <div
-                            style="background:#1e1e24; border:1px solid var(--border-subtle); padding:20px; border-radius:12px; max-width:80%;">
-                            <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">ChefEdwin v1.0
+                <div class="metric-card"
+                    style="background: linear-gradient(135deg, var(--bg-card), rgba(192, 132, 252, 0.1));">
+                    <i class="ph-duotone ph-fire metric-icon" style="color:var(--accent-purple);"></i>
+                    <div class="metric-label">Tendencia</div>
+                    <div class="metric-value" style="font-size:24px;">{{ stats.top_trend }}</div>
+                    <div class="metric-trend" style="background:rgba(192,132,252,0.2); color:var(--accent-purple);">Hot
+                        Topic</div>
+                </div>
+            </div>
+
+            <!-- CHART & TABLES -->
+            <div class="chart-section">
+                <!-- CHART -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Actividad Reciente (7 Días)</div>
+                    </div>
+                    <div style="position: relative; flex:1; width:100%;">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- TOP STUDENTS -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Estudiantes Destacados</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        {% for st in stats.top_students %}
+                        <div class="student-item">
+                            <div class="student-info">
+                                <div class="avatar-circle">{{ st.student__name|slice:":1"|default:"?" }}</div>
+                                <div>
+                                    <div style="font-weight:600; font-size:14px;">{{
+                                        st.student__name|default:st.student__phone_number }}</div>
+                                    <div style="font-size:11px; color:var(--text-muted);">{{ st.student__phone_number }}
+                                    </div>
+                                </div>
                             </div>
-                            <h3 style="color:var(--primary); margin-bottom:8px;">preparado</h3>
-                            <p style="color:var(--text-main); font-size:14px; line-height:1.5;">
-                                Conectado a <strong>{{ summary.total_conversations }}</strong> conversaciones. Puedo
-                                ayudarte a analizar los datos de tus estudiantes.
-                            </p>
+                            <div class="msg-badge">{{ st.msg_count }} msgs</div>
                         </div>
-
-                    </div>
-
-                    <!-- Input Area -->
-                    <div style="padding:24px; border-top:1px solid var(--border-subtle);">
-                        <div class="input-group"
-                            style="background:var(--bg-body); padding:8px 8px 8px 16px; border-radius:12px; border:1px solid var(--border-subtle); display:flex; align-items:center;">
-                            <input type="text" id="chatInput" class="modern-input"
-                                placeholder="Type your research query..."
-                                style="border:none; background:transparent; font-size:14px; flex:1; color:white; outline:none;">
-                            <button id="sendBtn" class="modern-btn"
-                                style="background:white; color:black; width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;">
-                                <i class="ph-bold ph-arrow-right"></i>
-                            </button>
+                        {% empty %}
+                        <div style="text-align:center; color:var(--text-muted); padding:20px;">
+                            Sin datos aún
                         </div>
+                        {% endfor %}
                     </div>
+                </div>
+            </div>
 
+            <!-- LIVE LOGS (Replaces AI Chat) -->
+            <div class="panel" style="min-height: 400px; overflow:hidden;">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="ph-duotone ph-list-dashes" style="margin-right:8px; color:var(--text-main);"></i>
+                        Registro en Vivo (Database Stream)
+                    </div>
                 </div>
 
+                <div style="overflow-y:auto; flex:1; padding-right:8px;">
+                    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead>
+                            <tr
+                                style="text-align:left; color:var(--text-muted); border-bottom:1px solid var(--border-subtle);">
+                                <th style="padding:12px; font-weight:600;">Hora</th>
+                                <th style="padding:12px; font-weight:600;">Usuario</th>
+                                <th style="padding:12px; font-weight:600;">Mensaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in stats.recent_logs %}
+                            <tr style="border-bottom:1px solid var(--border-subtle);">
+                                <td style="padding:12px; color:var(--text-muted); white-space:nowrap;">
+                                    {{ log.timestamp|date:"H:i" }}
+                                </td>
+                                <td style="padding:12px;">
+                                    <div style="font-weight:600;">
+                                        {% if log.role == 'teacher' %}
+                                        <span style="color:var(--primary);">Chef Edwin</span>
+                                        {% else %}
+                                        {{ log.student.name|default:log.student.phone_number|slice:":8" }}..
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td style="padding:12px; color:var(--text-main);">
+                                    <div
+                                        style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                        {{ log.message_body }}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" style="padding:24px; text-align:center; color:var(--text-muted);">
+                                    Esperando actividad...
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </main>
     </div>
 
-    <!-- STYLES FOR HYBRID LAYOUT -->
-    <style>
-        .metric-card-mini {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            padding: 16px;
-            border-radius: 12px;
-        }
-
-        .metric-card-mini .label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .metric-card-mini .value {
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 4px;
-        }
-
-        .metric-card-mini .trend {
-            font-size: 12px;
-        }
-
-        .metric-card-mini .trend.positive {
-            color: #10b981;
-        }
-
-        .metric-card-mini .trend.warning {
-            color: #f59e0b;
-        }
-
-        .metric-card-mini .trend.neutral {
-            color: var(--text-muted);
-        }
-
-        .tool-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 13px;
-            margin-bottom: 8px;
-            transition: all 0.2s;
-        }
-
-        .tool-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            border-color: var(--text-muted);
-        }
-    </style>
-
     <!-- SCRIPTS -->
+    <!-- DATA TRANSPORT (For clean JS) -->
+    {{ stats.chart_labels|json_script:"chart_labels" }}
+    {{ stats.chart_data|json_script:"chart_data" }}
+
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
+        // --- 1. DATA INJECTION (Safe & Clean) ---
+        const dbLabels = JSON.parse(document.getElementById('chart_labels').textContent);
+        const dbData = JSON.parse(document.getElementById('chart_data').textContent);
 
-        chatInput.focus();
+        // --- 2. CHART.JS CONFIGURATION ---
+        const ctx = document.getElementById('activityChart').getContext('2d');
 
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+        // Gradient for line
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(129, 140, 248, 0.5)');   // Primary color high
+        gradient.addColorStop(1, 'rgba(129, 140, 248, 0.0)');   // Fade out
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dbLabels,
+                datasets: [{
+                    label: 'Mensajes',
+                    data: dbData,
+                    borderColor: '#818cf8', // Indigo 400
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#18181b',
+                    pointBorderColor: '#818cf8',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.4 // Smooth curve
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#27272a',
+                        titleColor: '#fff',
+                        bodyColor: '#a1a1aa',
+                        borderColor: '#3f3f46',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: '#71717a' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#71717a' }
+                    }
+                }
+            }
         });
 
-        sendBtn.addEventListener('click', sendMessage);
-
-        async function sendMessage() {
-            const question = chatInput.value.trim();
-            if (!question) return;
-
-            // User Bubble
-            const userBubble = document.createElement('div');
-            userBubble.className = 'bubble b-user';
-            userBubble.textContent = question;
-            chatMessages.appendChild(userBubble);
-
-            chatInput.value = '';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            // Loading Bubble
-            const loadingBubble = document.createElement('div');
-            loadingBubble.className = 'bubble b-ai';
-            loadingBubble.style.opacity = '0.7';
-            loadingBubble.innerHTML = '<i class="ph-duotone ph-spinner-gap ph-spin"></i> Analizando base de datos...';
-            chatMessages.appendChild(loadingBubble);
-
-            try {
-                const response = await fetch('{% url "research_chat" %}', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
-                    body: JSON.stringify({ question: question })
-                });
-                const data = await response.json();
-
-                // Replace loading
-                loadingBubble.style.opacity = '1';
-                loadingBubble.innerHTML = marked.parse(data.response || "No logré obtener una respuesta.");
-            } catch (error) {
-                loadingBubble.textContent = "Error de conexión con el servidor.";
-                loadingBubble.style.color = "#ef4444";
-                console.error(error);
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+        // --- 2. CHAT LOGIC REMOVED (Zero Token Policy) ---
     </script>
 </body>
 

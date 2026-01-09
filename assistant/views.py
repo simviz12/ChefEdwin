@@ -1,7 +1,15 @@
-from django.http import HttpResponse
+import logging
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.contrib.admin.views.decorators import staff_member_required
 from twilio.twiml.messaging_response import MessagingResponse
+from twilio.request_validator import RequestValidator
 from .ai_service import get_chef_response
+import json
+
+logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def webhook(request):
@@ -10,6 +18,27 @@ def webhook(request):
     Step 1.4: Receive POST requests.
     """
     if request.method == 'POST':
+        # --- SECURITY: Validate Twilio Signature ---
+        # This prevents attackers from spoofing messages
+        if settings.TWILIO_AUTH_TOKEN:
+            validator = RequestValidator(settings.TWILIO_AUTH_TOKEN)
+            signature = request.headers.get('X-Twilio-Signature', '')
+            
+            # Using request.POST.dict() handles the QueryDict conversion
+            # Twilio signs the full absolute URI
+            url = request.build_absolute_uri()
+            
+            # Fix for Render/Proxies: Twilio sends to https, but internal app might see http
+            if not settings.DEBUG and url.startswith("http://"):
+                url = url.replace("http://", "https://")
+
+            # Validate! (Skip if DEBUG and no signature, useful for local manual_test.py)
+            if not (settings.DEBUG and not signature):
+                 if not validator.validate(url, request.POST.dict(), signature):
+                     logger.warning(f"⚠️ SECURITY ALERT: Invalid Twilio Signature from {request.META.get('REMOTE_ADDR')}")
+                     return HttpResponseForbidden("Invalid Twilio Signature")
+        # -------------------------------------------
+
         # Create a TwiML response
         response = MessagingResponse()
         
@@ -37,6 +66,7 @@ def webhook(request):
         try:
             student = Student.objects.get(phone_number=sender_number)
         except Student.DoesNotExist:
+            logger.info(f"Unauthorized access attempt from {sender_number}")
             # STRICT MODE: Do not auto-create. Teacher must add them first.
             response.message("🚫 Usuario No Registrado.\nPida al profesor que lo registre en el sistema antes de continuar.")
             return HttpResponse(str(response), content_type='text/xml')
@@ -58,6 +88,7 @@ def webhook(request):
             if is_valid:
                 student.is_authenticated = True
                 student.save()
+                logger.info(f"User {student.name} ({sender_number}) authenticated successfully.")
                 response.message("✅ Acceso Concedido. Bienvenido a la cocina de Chef Edwin. ¿Qué necesitas?")
                 return HttpResponse(str(response), content_type='text/xml')
             else:
@@ -66,8 +97,22 @@ def webhook(request):
                 
         # User is authenticated, proceed
         role = student.role
-        print(f"DEBUG: Msg from {sender_number}, Role: {role}, Auth: True")
-        # -------------------------------
+        logger.debug(f"Msg from {sender_number}, Role: {role}, Auth: True")
+        
+        # --- UX IMPROVEMENT: Immediate Acknowledgment for Images ---
+        # Since images take time to process, tell the user we are working on it.
+        if num_media > 0 and settings.TWILIO_ACCOUNT_SID and settings.TWILIO_AUTH_TOKEN:
+             try:
+                 from twilio.rest import Client
+                 client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+                 client.messages.create(
+                     body="👨‍🍳 Oído cocina. Analizando tu presentación visual... 🔍",
+                     from_=settings.TWILIO_PHONE_NUMBER,
+                     to=sender_number
+                 )
+             except Exception as e:
+                 logger.error(f"Error sending Ack message: {e}")
+        # -----------------------------------------------------------
 
         # Get response from Chef Edwin (Gemini)
         # Step 4.3: Pass sender_number so 'The Brain' can fetch DB context
@@ -87,14 +132,27 @@ def webhook(request):
                 message_body=msg,
                 chef_response=chef_reply
             )
-            print("DEBUG: Conversation saved to DB with FK link.")
+            logger.debug("Conversation saved to DB with FK link.")
         except Exception as e:
-            print(f"ERROR saving to DB: {e}")
+            logger.error(f"ERROR saving to DB: {e}")
         # ----------------------------------------
 
         return HttpResponse(str(response), content_type='text/xml')
     else:
         return HttpResponse("Method not allowed", status=405)
+
+
+# ============================================
+# Step 5.5 + 5.6: Export functions (CSV/PDF)
+# ============================================
+# (Code omitted for brevity in replacement, but maintained in logic if using multi_replace)
+# Wait, I'm using replace_file_content for the file. 
+# Since I cannot easily use 'replace' for scattered prints without context, I will just rewrite the `webhook` implementation part.
+# The previous sections for PDF/CSV are separate functions. I will use 'multi_replace' to target specific blocks.
+# Actually - replacing the whole file is risky if I miss lines.
+# I will use multi_replace.
+
+
 
 
 # ============================================
@@ -340,38 +398,118 @@ import json
 @staff_member_required
 def teacher_dashboard(request):
     """
-    Main dashboard for teachers with statistics and research chat.
+    Main dashboard (Vista General) - Hybrid: AI Chat + Summary Cards.
+    Matches reference image layout.
     """
     from .models import ConversationLog, Student
-    from datetime import datetime, timedelta
-    
-    # Calculate statistics
+    from django.db.models import Count
+    from collections import Counter
+    import re
+
+    # Basic Metrics for Sidebar Cards
     total_students = Student.objects.filter(role='student').count()
-    active_students = Student.objects.filter(
-        is_authenticated=True,
-        role='student'
-    ).count()
-    
-    # Top trend (most discussed topic - simplified)
-    top_trend = "Italiana"  # You can make this dynamic based on conversation analysis
-    
-    # Average impact (placeholder - you can calculate based on your metrics)
-    avg_impact = "+15%"
-    
+    # Active nodes can be simulated as active students for now
+    active_nodes = Student.objects.filter(is_authenticated=True, role='student').count() 
+    total_logs = ConversationLog.objects.count()
+
+    # Simple Top Trend (Lightweight version)
+    recent_msgs = ConversationLog.objects.filter(role='student').values_list('message_body', flat=True).order_by('-timestamp')[:50]
+    all_text = " ".join(recent_msgs).lower()
+    words = re.findall(r'\w+', all_text)
+    stop_words = {'hola', 'gracias', 'chef', 'edwin', 'como', 'esta', 'hacer', 'puedo', 'quiero', 'receta', 'para', 'tengo', 'que', 'con', 'las', 'los', 'una', 'por', 'del', 'mas'}
+    filtered_words = [w for w in words if w not in stop_words and len(w) > 3]
+    common_topics = Counter(filtered_words).most_common(1)
+    top_trend = common_topics[0][0].capitalize() if common_topics else "N/A"
+
     context = {
+        'active_tab': 'overview',
+        'summary': {
+            'total_students': total_students,
+            'active_nodes': active_nodes,
+            'total_conversations': total_logs,
+            'top_topic': top_trend
+        }
+    }
+    return render(request, 'assistant/dashboard.html', context)
+
+@staff_member_required
+def teacher_stats(request):
+    """
+    Statistics Dashboard (Estadísticas) - Focused on Token-Free Metrics.
+    """
+    from .models import ConversationLog, Student
+    from django.db.models import Count
+    from django.db.models.functions import TruncDate
+    from datetime import datetime, timedelta
+    from collections import Counter
+    import re
+
+    # 1. Basic Counts
+    total_students = Student.objects.filter(role='student').count()
+    active_students = Student.objects.filter(is_authenticated=True, role='student').count()
+    total_logs = ConversationLog.objects.count()
+
+    # 2. Activity Trends (Last 7 Days) for Chart.js
+    last_7_days = datetime.now() - timedelta(days=7)
+    daily_activity = ConversationLog.objects.filter(timestamp__gte=last_7_days) \
+        .annotate(date=TruncDate('timestamp')) \
+        .values('date') \
+        .annotate(count=Count('id')) \
+        .order_by('date')
+
+    # Format for Chart.js
+    chart_labels = []
+    chart_data = []
+    
+    # Fill gaps
+    days_map = {entry['date'].strftime('%d/%m'): entry['count'] for entry in daily_activity}
+    
+    for i in range(6, -1, -1):
+        day = (datetime.now() - timedelta(days=i)).strftime('%d/%m')
+        chart_labels.append(day)
+        chart_data.append(days_map.get(day, 0))
+
+    # 3. "No-Token" Topic Analysis
+    recent_msgs = ConversationLog.objects.filter(role='student').values_list('message_body', flat=True).order_by('-timestamp')[:100]
+    
+    all_text = " ".join(recent_msgs).lower()
+    words = re.findall(r'\w+', all_text)
+    stop_words = {'hola', 'gracias', 'chef', 'edwin', 'como', 'esta', 'hacer', 'puedo', 'quiero', 'receta', 'para', 'tengo', 'que', 'con', 'las', 'los', 'una', 'por', 'del', 'mas'}
+    filtered_words = [w for w in words if w not in stop_words and len(w) > 3]
+    
+    common_topics = Counter(filtered_words).most_common(1)
+    top_trend = common_topics[0][0].capitalize() if common_topics else "General"
+
+    # 4. Top Students (Engagement)
+    top_students_qs = ConversationLog.objects.values('student__name', 'student__phone_number') \
+        .annotate(msg_count=Count('id')) \
+        .order_by('-msg_count')[:5]
+    
+    # 5. Engagement Score
+    if active_students > 0:
+        engagement_score = round(total_logs / active_students, 1)
+    else:
+        engagement_score = 0
+
+    # 6. Recent Activity Log
+    recent_logs = ConversationLog.objects.select_related('student').order_by('-timestamp')[:15]
+
+    context = {
+        'active_tab': 'stats',
         'stats': {
             'total_students': total_students,
             'active_students': active_students,
+            'total_conversations': total_logs,
             'top_trend': top_trend,
-            'avg_impact': avg_impact,
-            # V1.0 Metrics Restored (Placeholders since DB stats simplified)
-            'sentiment_score': 0.0, 
-            'tech_vocabulary': "0%",
-            'total_conversations': ConversationLog.objects.count(), # Useful for chat welcome
+            'engagement_score': engagement_score,
+            'chart_labels': chart_labels,
+            'chart_data': chart_data,
+            'top_students': top_students_qs,
+            'recent_logs': recent_logs,
         }
     }
     
-    return render(request, 'assistant/dashboard.html', context)
+    return render(request, 'assistant/stats.html', context)
 
 
 @staff_member_required
@@ -453,7 +591,7 @@ Básate EXCLUSIVAMENTE en los 'DATOS DE CONVERSACIONES' provistos. SI NO HAY DAT
                 response_text = result.text
                 break
             except Exception as e:
-                print(f"Model {model_name} failed: {e}")
+                logger.warning(f"Model {model_name} failed: {e}")
                 continue
         
         if not response_text:
@@ -462,5 +600,5 @@ Básate EXCLUSIVAMENTE en los 'DATOS DE CONVERSACIONES' provistos. SI NO HAY DAT
         return JsonResponse({'response': response_text})
         
     except Exception as e:
-        print(f"Research chat error: {e}")
+        logger.error(f"Research chat error: {e}")
         return JsonResponse({'error': str(e)}, status=500)

@@ -174,8 +174,12 @@ def export_conversations_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="conversation_logs.csv"'
     
+    # 1. Add BOM (Byte Order Mark) for Excel to recognize UTF-8
+    response.write(u'\ufeff'.encode('utf8'))
+    
     # Create CSV writer
-    writer = csv.writer(response)
+    # 2. Use semicolon (;) delimiter for better compatibility with Spanish Excel
+    writer = csv.writer(response, delimiter=';')
     
     # Write header row
     writer.writerow([

@@ -88,8 +88,15 @@ def webhook(request):
             if is_valid:
                 student.is_authenticated = True
                 student.save()
+                student.save()
                 logger.info(f"User {student.name} ({sender_number}) authenticated successfully.")
-                response.message("✅ Acceso Concedido. Bienvenido a la cocina de Chef Edwin. ¿Qué necesitas?")
+                
+                # --- NEW: Terms and Conditions Link in Welcome Message ---
+                # Using the live URL as requested
+                terms_link = "https://chefedwin.onrender.com/assistant/legal/terminos/"
+                welcome_msg = f"✅ Acceso Concedido. Bienvenido a la cocina de Chef Edwin.\n\n📜 Antes de empezar, consulta nuestros términos de uso aquí: {terms_link}\n\n¿Qué necesitas hoy?"
+                
+                response.message(welcome_msg)
                 return HttpResponse(str(response), content_type='text/xml')
             else:
                 response.message("🔒 Sistema Protegido.\nIntroduce tu contraseña personal para acceder.")
@@ -606,3 +613,11 @@ Básate EXCLUSIVAMENTE en los 'DATOS DE CONVERSACIONES' provistos. SI NO HAY DAT
     except Exception as e:
         logger.error(f"Research chat error: {e}")
         return JsonResponse({'error': str(e)}, status=500)
+
+
+def terms_view(request):
+    """
+    Public view for Terms and Conditions.
+    No authentication required.
+    """
+    return render(request, 'assistant/legal_terms.html')

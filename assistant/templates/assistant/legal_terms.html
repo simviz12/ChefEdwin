@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones | Chef Edwin</title>
+    <!-- Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            /* V20 EXECUTIVE DARK PALETTE (Copied from Dashboard) */
+            --bg-body: #09090b;
+            --bg-card: #27272a;
+            --bg-hover: #3f3f46;
+            --border-subtle: #3f3f46;
+            --primary: #818cf8;
+            --primary-dim: rgba(129, 140, 248, 0.1);
+            --accent-purple: #c084fc;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --glass: rgba(39, 39, 42, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(129, 140, 248, 0.15), transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(192, 132, 252, 0.1), transparent 40%);
+        }
+
+        .legal-container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top decorative line */
+        .legal-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-purple));
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 0 20px var(--primary-dim);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #d4d4d8;
+        }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            font-size: 18px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        h2 i {
+            opacity: 0.8;
+        }
+
+        p,
+        ul {
+            margin-bottom: 16px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        strong {
+            color: white;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .warning-box strong {
+            color: #fbbf24;
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .legal-container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="legal-container">
+
+        <header class="header">
+            <div class="logo-area">
+                <img src="{% static 'assistant/img/logo.png' %}" alt="Logo" style="width: 48px; height: 48px;">
+                <span style="font-weight: 700; font-size: 20px;">ChefEdwin</span>
+            </div>
+            <h1>Términos y Condiciones</h1>
+            <p class="subtitle">Última actualización: Enero 2026</p>
+        </header>
+
+        <div class="content">
+            <p>Bienvenido a <strong>"Chef Edwin"</strong>. Al utilizar nuestro asistente de inteligencia artificial,
+                aceptas regirte por los siguientes términos diseñados para garantizar un uso seguro, ético y educativo.
+            </p>
+
+            <h2><i class="ph-bold ph-robot"></i> 1. Naturaleza del Servicio (IA)</h2>
+            <p>Este servicio utiliza tecnología de Inteligencia Artificial Generativa (Google Gemini). Debes tener en
+                cuenta:</p>
+            <ul>
+                <li>La IA es una herramienta de apoyo y puede cometer imprecisiones. Verifica siempre información
+                    crítica de seguridad alimentaria (tiempos, temperaturas).</li>
+                <li><strong>Alergias:</strong> El usuario es el único responsable de validar ingredientes. Chef Edwin no
+                    asume responsabilidad por reacciones adversas.</li>
+            </ul>
+
+            <div class="warning-box">
+                <p style="margin-bottom:12px; font-weight:700; font-size:1.1em;">
+                    <i class="ph-bold ph-warning-circle"></i> 2. Política de Datos Sensibles (Habeas Data)
+                </p>
+                <p>Para proteger tu privacidad y cumplir con la Ley 1581 de 2012, queda <strong>terminantemente
+                        prohibido</strong>:</p>
+                <ul style="margin:0; color:#fbbf24;">
+                    <li>Enviar fotografías donde aparezcan <strong>rostros de personas</strong> (tuyos o de terceros).
+                    </li>
+                    <li>Compartir fotos de documentos de identidad, tarjetas bancarias o datos confidenciales.</li>
+                </ul>
+            </div>
+
+            <h2><i class="ph-bold ph-shield-check"></i> 3. Responsabilidad y Privacidad</h2>
+            <p>Respetamos tu privacidad. Solo procesamos la información estrictamente necesaria para brindarte la
+                respuesta culinaria.</p>
+            <ul>
+                <li>Si compartes imágenes de terceros sin su consentimiento, asumes total responsabilidad legal.</li>
+                <li>Hacemos monitoreo automático para eliminar imágenes que violen estas políticas.</li>
+            </ul>
+
+            <h2><i class="ph-bold ph-student"></i> 4. Uso Académico (SENA / Instituciones)</h2>
+            <p>Si eres parte de una prueba piloto institucional:</p>
+            <ul>
+                <li>Las interacciones pueden ser analizadas de forma anónima para fines de mejora pedagógica.</li>
+                <li>Utiliza esta herramienta para potenciar tu aprendizaje, no para reemplazar tu estudio personal.</li>
+            </ul>
+
+            <h2><i class="ph-bold ph-copyright"></i> 5. Propiedad Intelectual</h2>
+            <p>El software "Chef Edwin", sus algoritmos y personajes son propiedad exclusiva de sus desarrolladores. Se
+                otorga una licencia de uso personal, no transferible y revocable.</p>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Proyecto Chef Edwin. Todos los derechos reservados.</p>
+            <p>Desarrollado con tecnología Google DeepMind.</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

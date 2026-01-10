@@ -368,7 +368,7 @@
         <!-- SIDEBAR -->
         <nav class="sidebar">
             <div class="brand">
-                <div class="brand-icon"><i class="ph-bold ph-chef-hat"></i></div>
+                <img src="{% static 'assistant/img/logo.png' %}" alt="Logo" style="width: 40px; height: 40px;">
                 <div class="brand-text">ChefEdwin</div>
             </div>
 
@@ -467,7 +467,8 @@
                             <div class="student-info">
                                 <div class="avatar-circle">{{ st.student__name|slice:":1"|default:"?" }}</div>
                                 <div>
-                                    <div style="font-weight:600; font-size:14px;">{{ st.student__name|default:st.student__phone_number }}</div>
+                                    <div style="font-weight:600; font-size:14px;">{{
+                                        st.student__name|default:st.student__phone_number }}</div>
                                     <div style="font-size:11px; color:var(--text-muted);">{{ st.student__phone_number }}
                                     </div>
                                 </div>

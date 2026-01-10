@@ -20,7 +20,7 @@ Respetamos tu privacidad según la Ley 1581 de 2012 (Habeas Data).
 ## 3. PROPIEDAD INTELECTUAL
 El software, personaje y lógica de "Chef Edwin" son propiedad exclusiva de sus desarrolladores. El usuario tiene una licencia limitada, personal y no transferible para usar el chat con fines educativos y culinarios.
 
-## 4. USO ACADÉMICO (SENA / INSTITUCIONES)
+## 4. USO ACADÉMICO E INSTITUCIONAL
 Si usas este servicio como parte de una prueba piloto académica:
 *   Tus conversaciones pueden ser analizadas de forma anónima para mejorar la calidad pedagógica del asistente.
 *   No uses el chat para hacer trampa en exámenes o evaluaciones.

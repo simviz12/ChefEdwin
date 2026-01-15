@@ -1,146 +1,173 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chef Edwin - Executive One Pager</title>
-    <!-- Fonts: Plus Jakarta Sans for a modern tech feel -->
+    <title>Chef Edwin - Executive Brief</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {
+            --bg: #09090b;
+            --surface: #121215;
+            --surface-highlight: #1e1e22;
             --primary: #818cf8;
-            /* Indigo */
-            --dark: #09090b;
-            /* Zinc 950 */
-            --card: #18181b;
-            /* Zinc 900 */
-            --text: #f4f4f5;
-            --muted: #a1a1aa;
             --accent: #2dd4bf;
-            /* Teal */
+            --text: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
         }
 
+        /* RESET & BASE */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-print-color-adjust: exact;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--dark);
+            background-color: var(--bg);
             color: var(--text);
-            width: 210mm;
-            /* A4 Width */
-            min-height: 297mm;
-            /* A4 Height */
-            margin: 0 auto;
-            padding: 40px;
-            position: relative;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
             background-image:
-                radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.15), transparent 30%),
-                radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.05), transparent 30%);
+                radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.08), transparent 40%),
+                radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.05), transparent 40%);
         }
 
-        /* LAYOUT GRID */
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto 1fr auto;
+        /* SHEET CONTAINER (Desktop Default) */
+        .sheet {
+            width: 100%;
+            max-width: 210mm;
+            /* A4 width limit for desktop readability */
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
             gap: 40px;
-            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* DECORATION */
+        .sheet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
         }
 
         /* HEADER */
         header {
-            grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #27272a;
-            padding-bottom: 20px;
-            margin-bottom: 10px;
+            align-items: flex-end;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            /* Safety for smaller screens */
+            gap: 20px;
         }
 
-        .brand {
+        .header-left {
+            flex: 1;
+        }
+
+        .logo-row {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .logo-img {
-            width: 60px;
-            height: 60px;
-            /* Using the static placeholder until real image loads */
-            background: linear-gradient(135deg, var(--primary), #c084fc);
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            font-size: 30px;
-            color: white;
-        }
-
-        .brand h1 {
-            font-size: 32px;
+        .header-left h1 {
+            font-size: clamp(28px, 4vw, 36px);
+            /* Responsive font size */
             font-weight: 800;
             letter-spacing: -1px;
-            line-height: 1;
+            background: linear-gradient(to right, white, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+            line-height: 1.1;
         }
 
-        .brand p {
-            font-size: 14px;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-
-        .tagline {
-            text-align: right;
+        .header-left p {
             color: var(--primary);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 12px;
             letter-spacing: 1px;
-            border: 1px solid rgba(129, 140, 248, 0.3);
-            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .status-badge {
+            background: rgba(45, 212, 191, 0.1);
+            color: var(--accent);
+            padding: 4px 10px;
             border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
 
-        /* LEFT COLUMN: CONTENT */
-        .left-col {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
+        /* GRID LAYOUTS */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
         }
 
-        .section-title {
-            color: var(--primary);
-            text-transform: uppercase;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        /* COMPONENT: CARDS */
+        .card {
+            background: var(--surface-highlight);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .section-label {
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid #27272a;
-            padding: 24px;
-            border-radius: 16px;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
 
         h2 {
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 18px;
             font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+            line-height: 1.3;
         }
 
         p {
@@ -149,30 +176,21 @@
             color: #d4d4d8;
         }
 
-        .problem-text {
-            border-left: 3px solid #ef4444;
-            padding-left: 15px;
+        /* COMPONENT: BENEFITS */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
 
-        .solution-text {
-            border-left: 3px solid var(--accent);
-            padding-left: 15px;
+        .benefit-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
         }
 
-        .benefits-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .icon-box {
+        .b-icon {
             width: 32px;
             height: 32px;
             background: rgba(129, 140, 248, 0.1);
@@ -180,84 +198,367 @@
             border-radius: 8px;
             display: grid;
             place-items: center;
-            font-size: 18px;
+            margin-bottom: 12px;
         }
 
-        /* RIGHT COLUMN: VISUALS */
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .system-image-container {
-            width: 100%;
-            height: 300px;
-            background: #18181b;
-            border: 1px solid #3f3f46;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        .system-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .call-to-action {
-            background: linear-gradient(135deg, var(--card), #202024);
-            border: 1px solid #3f3f46;
-            border-radius: 16px;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: auto;
-        }
-
-        .qr-section {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .qr-code {
-            background: white;
-            padding: 8px;
-            border-radius: 12px;
-            width: 100px;
-            height: 100px;
-        }
-
-        .contact-info {
-            text-align: right;
-        }
-
-        .contact-item {
+        .b-title {
             font-size: 14px;
-            color: var(--text);
-            margin-bottom: 6px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .b-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* COMPONENT: BROWSER MOCKUP */
+        .browser-mockup {
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            height: auto;
+            aspect-ratio: 16/10;
             display: flex;
+            flex-direction: column;
+        }
+
+        .browser-bar {
+            background: #27272a;
+            padding: 8px 12px;
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px solid #3f3f46;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background: #ef4444;
+        }
+
+        .yellow {
+            background: #f59e0b;
+        }
+
+        .green {
+            background: #10b981;
+        }
+
+        .browser-content {
+            flex: 1;
+            background: #18181b;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* MINI DASHBOARD UI */
+        .md-layout {
+            display: flex;
+            height: 100%;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .md-sidebar {
+            width: 40px;
+            background: #27272a;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: flex-end;
+            padding-top: 10px;
             gap: 8px;
         }
 
-        /* PRINT HELPER */
+        .md-icon-dot {
+            width: 20px;
+            height: 20px;
+            background: #3f3f46;
+            border-radius: 6px;
+        }
+
+        .md-icon-dot.active {
+            background: var(--primary);
+        }
+
+        .md-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .md-header-fake {
+            height: 20px;
+            background: #27272a;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        .md-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .md-card {
+            background: #27272a;
+            border-radius: 6px;
+            padding: 8px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 40px;
+        }
+
+        .md-card-val {
+            height: 6px;
+            width: 60%;
+            background: #52525b;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .md-card-label {
+            height: 4px;
+            width: 40%;
+            background: #3f3f46;
+            border-radius: 2px;
+        }
+
+        .md-chart-area {
+            flex: 1;
+            background: #27272a;
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 10px 15px 0 15px;
+            overflow: hidden;
+        }
+
+        .md-bar {
+            width: 12%;
+            background: var(--primary);
+            opacity: 0.5;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .md-bar:nth-child(2) {
+            height: 60%;
+        }
+
+        .md-bar:nth-child(3) {
+            height: 40%;
+            background: var(--accent);
+        }
+
+        .md-bar:nth-child(4) {
+            height: 80%;
+        }
+
+        .md-bar:nth-child(5) {
+            height: 50%;
+        }
+
+        /* METRICS BLOCK */
+        .metrics-block {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .metrics-row {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        /* CTA */
+        .cta-row {
+            display: flex;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.05), transparent);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .cta-text h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            width: 90px;
+            height: 90px;
+            flex-shrink: 0;
+        }
+
+        .qr-container img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ------------------------------------------- */
+        /* RESPONSIVE MEDIA QUERIES                    */
+        /* ------------------------------------------- */
+
+        @media (max-width: 1024px) {
+
+            /* Tablet tweaks */
+            .sheet {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+
+            .main-grid {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* Mobile Layout Switch */
+            body {
+                padding: 0;
+                background: var(--surface);
+                display: block;
+                /* Disable flex centering */
+                height: auto;
+                min-height: 100vh;
+            }
+
+            /* Native app feel */
+
+            .sheet {
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 24px 20px;
+                background: transparent;
+                height: auto;
+                min-height: 100vh;
+                gap: 32px;
+            }
+
+            /* Header adjustments */
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                padding-bottom: 20px;
+            }
+
+            .header-right {
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                width: 100%;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .brand-subtext {
+                font-size: 12px;
+            }
+
+            /* Smaller subtitle */
+
+            /* Stack columns */
+            .main-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            /* Visuals */
+            .browser-mockup {
+                aspect-ratio: auto;
+                height: 240px;
+            }
+
+            /* CTA Mobile */
+            .cta-row {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                background: linear-gradient(180deg, rgba(129, 140, 248, 0.05), rgba(0, 0, 0, 0.2));
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            /* Small Phone tweaks */
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Stack benefits */
+
+            .header-left h1 {
+                font-size: 32px;
+            }
+
+            .metrics-row {
+                flex-direction: row;
+                /* Keep metrics side-by-side even on small phones */
+                gap: 8px;
+            }
+
+            .metric-val {
+                font-size: 18px !important;
+            }
+
+            .metric-lbl {
+                font-size: 10px !important;
+            }
+        }
+
+        /* PRINT OVERRIDES (Keep A4 structure) */
         @media print {
             body {
-                margin: 0;
-                padding: 20px;
+                padding: 0;
+                background: white;
+            }
+
+            .sheet {
+                box-shadow: none;
+                border: none;
                 width: 100%;
+                max-width: 100%;
+                padding: 0;
+                page-break-after: always;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .status-badge {
+                display: none;
+            }
+
+            .cta-row {
+                border: 1px solid #ddd;
             }
         }
     </style>
@@ -265,117 +566,173 @@
 
 <body>
 
-    <header>
-        <div class="brand">
-            <!-- Using the local logo if available via relative path assuming this file is in root -->
-            <img src="./assistant/static/assistant/img/logo.png" alt="ChefEdwin" class="logo-img"
-                style="background:none;">
-            <div>
-                <h1>Chef Edwin</h1>
-                <p>Asistente Culinario Educativo con IA</p>
+    <div class="sheet">
+
+        <!-- HEADER -->
+        <header>
+            <div class="header-left">
+                <div class="logo-row">
+                    <img src="{% static 'assistant/img/logo.png' %}"
+                        style="width:40px; height:40px; filter: drop-shadow(0 0 10px rgba(129,140,248,0.3));"
+                        alt="Logo">
+                    <span class="status-badge"><i class="ph-bold ph-check-circle"></i> Ready to Deploy</span>
+                </div>
+                <h1>Chef Edwin AI</h1>
+                <p class="brand-subtext">Asistente de Formación Técnica y Culinaria</p>
             </div>
-        </div>
-        <div class="tagline">Solución EdTech Escalable</div>
-    </header>
+            <div class="header-right">
+                <div style="font-size:12px; color:var(--text-muted);">Platform Overview</div>
+                <div style="font-weight:700; font-size:14px; color:var(--text);">Executive Brief 2026</div>
+            </div>
+        </header>
 
-    <div class="container">
+        <!-- MAIN LAYOUT -->
+        <div class="main-grid">
 
-        <!-- LEFT COLUMN -->
-        <div class="left-col">
+            <!-- COLUMN 1: PITCH -->
+            <div style="display:flex; flex-direction:column; gap:20px;">
+                <!-- PROBLEM -->
+                <div class="card" style="border-left: 3px solid #ef4444; margin-bottom:0;">
+                    <div class="section-label"><i class="ph-bold ph-warning-circle" style="color:#ef4444;"></i> EL RETO
+                    </div>
+                    <h2>Atención Personalizada vs. Masiva</h2>
+                    <p>Las dudas críticas frenan la producción y el aprendizaje cuando el instructor no está disponible.
+                    </p>
+                </div>
 
-            <div class="box">
-                <div class="section-title"><i class="ph-bold ph-warning-circle"></i> EL PROBLEMA</div>
-                <div class="problem-text">
-                    <h2>Cuellos de botella en la formación técnica</h2>
-                    <p>Un instructor de cocina no puede responder dudas personalizadas a 30 estudiantes simultáneamente
-                        mientras supervisa procesos críticos (fuego, cuchillos). Las dudas técnicas fuera de clase
-                        quedan sin resolver.</p>
+                <!-- SOLUTION -->
+                <div class="card"
+                    style="border-left: 3px solid var(--accent); background: rgba(45, 212, 191, 0.03); margin-bottom:0;">
+                    <div class="section-label"><i class="ph-bold ph-lightning" style="color:var(--accent);"></i> LA
+                        SOLUCIÓN</div>
+                    <h2>Mentoría IA Instantánea</h2>
+                    <p>Un asistente inteligente integrado en WhatsApp que conoce el currículo técnico. Responde en
+                        segundos.</p>
+                </div>
+
+                <!-- BENEFITS GRID -->
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="b-icon"><i class="ph-bold ph-chart-line-up"></i></div>
+                        <div class="b-title">Escalable</div>
+                        <div class="b-desc">Atiende 1,000+ estudiantes.</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="b-icon"><i class="ph-bold ph-shield-check"></i></div>
+                        <div class="b-title">Seguro</div>
+                        <div class="b-desc">Protección de datos (Habeas Data).</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="b-icon"><i class="ph-bold ph-whatsapp-logo"></i></div>
+                        <div class="b-title">Sin Barreras</div>
+                        <div class="b-desc">Usa WhatsApp. Cero curvas.</div>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="b-icon"><i class="ph-bold ph-eye"></i></div>
+                        <div class="b-title">Auditable</div>
+                        <div class="b-desc">Dashboard docente en vivo.</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="box">
-                <div class="section-title"><i class="ph-bold ph-lightning"></i> LA SOLUCIÓN</div>
-                <div class="solution-text">
-                    <h2>Tutoría IA 24/7 vía WhatsApp</h2>
-                    <p>Un sistema inteligente que acompaña al estudiante en todo momento. Responde preguntas sobre
-                        recetas, tiempos, temperaturas y seguridad alimentaria al instante, usando la plataforma que
-                        ellos ya dominan: WhatsApp.</p>
-                </div>
-            </div>
+            <!-- COLUMN 2: VISUALS -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
 
-            <div class="box" style="flex:1;">
-                <div class="section-title"><i class="ph-bold ph-chart-line-up"></i> BENEFICIOS CLAVE</div>
-                <ul class="benefits-list">
-                    <li class="benefit-item">
-                        <div class="icon-box"><i class="ph-bold ph-rocket-launch"></i></div>
-                        <div>
-                            <strong>Escalabilidad Masiva</strong>
-                            <p style="font-size:13px; color:var(--muted)">Un solo sistema atiende a miles de alumnos
-                                simultáneamente sin saturarse.</p>
+                <!-- DASHBOARD MOCKUP -->
+                <div class="browser-mockup">
+                    <div class="browser-bar">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <div
+                            style="background:#000; height:12px; border-radius:4px; width:40%; opacity:0.3; margin-left:10px;">
                         </div>
-                    </li>
-                    <li class="benefit-item">
-                        <div class="icon-box"><i class="ph-bold ph-shield-check"></i></div>
-                        <div>
-                            <strong>Seguridad y Ética IA</strong>
-                            <p style="font-size:13px; color:var(--muted)">Respuestas filtradas y seguras. Protección
-                                contra datos sensibles y prevención de errores críticos.</p>
+                    </div>
+                    <div class="browser-content">
+                        <!-- Mini Dashboard UI -->
+                        <div class="md-layout">
+                            <div class="md-sidebar">
+                                <div class="md-icon-dot active"></div>
+                                <div class="md-icon-dot"></div>
+                                <div class="md-icon-dot"></div>
+                            </div>
+                            <div class="md-main">
+                                <div class="md-header-fake"></div>
+                                <div class="md-grid">
+                                    <div class="md-card">
+                                        <div class="md-card-val"></div>
+                                        <div class="md-card-label"></div>
+                                    </div>
+                                    <div class="md-card">
+                                        <div class="md-card-val" style="width:40%; background:var(--accent)"></div>
+                                        <div class="md-card-label"></div>
+                                    </div>
+                                    <div class="md-card">
+                                        <div class="md-card-val" style="width:80%; background:#ef4444"></div>
+                                        <div class="md-card-label"></div>
+                                    </div>
+                                </div>
+                                <div class="md-chart-area">
+                                    <div class="md-bar" style="height:30%"></div>
+                                    <div class="md-bar" style="height:50%"></div>
+                                    <div class="md-bar" style="height:70%"></div>
+                                    <div class="md-bar" style="height:45%"></div>
+                                    <div class="md-bar" style="height:85%"></div>
+                                    <div class="md-bar" style="height:60%"></div>
+                                </div>
+                            </div>
                         </div>
-                    </li>
-                    <li class="benefit-item">
-                        <div class="icon-box"><i class="ph-bold ph-presentation-chart"></i></div>
-                        <div>
-                            <strong>Dashboard Ejecutivo</strong>
-                            <p style="font-size:13px; color:var(--muted)">Visualización en tiempo real de qué preguntan
-                                los estudiantes y cómo progresan.</p>
+                        <div
+                            style="position:absolute; bottom:12px; left:0; right:0; text-align:center; text-shadow:0 2px 4px rgba(0,0,0,0.8);">
+                            <div
+                                style="font-size:12px; font-weight:700; color:white; background:rgba(0,0,0,0.5); padding:4px 12px;border-radius:20px; display:inline-block;">
+                                Live Teacher Dashboard</div>
                         </div>
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-
-        <!-- RIGHT COLUMN -->
-        <div class="right-col">
-
-            <!-- SYSTEM IMAGE PLACEHOLDER -->
-            <div class="system-image-container">
-                <!-- SUGGESTION: Replace this src with a real screenshot of the dashboard -->
-                <div style="padding: 40px; text-align: center;">
-                    <i class="ph-duotone ph-desktop"
-                        style="font-size: 64px; margin-bottom: 20px; color: var(--primary);"></i>
-                    <h3>Dashboard Ejecutivo</h3>
-                    <p style="font-size: 12px; margin-top: 10px;">Vista en tiempo real de métricas y chats</p>
-                </div>
-                <!-- If you have a screenshot, uncomment below: -->
-                <!-- <img src="screenshot_dashboard.png" alt="Dashboard Interfaz"> -->
-            </div>
-
-            <div class="box" style="background: linear-gradient(135deg, #18181b, #09090b);">
-                <div class="section-title" style="color:var(--text);"><i class="ph-bold ph-users-three"></i> CASO DE USO
-                </div>
-                <p><em>"Un estudiante en práctica olvida la temperatura de pasteurización. En lugar de detener la
-                        producción para buscar al chef, consulta a Chef Edwin y obtiene la respuesta en 3
-                        segundos."</em></p>
-            </div>
-
-            <div class="call-to-action">
-                <div class="qr-section">
-                    <!-- Dynamic QR Code to the Live Site -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chefedwin.onrender.com"
-                        alt="Demo QR" class="qr-code">
-                    <div>
-                        <h3 style="margin-bottom: 4px;">Pruébalo Ahora</h3>
-                        <p style="font-size: 12px; color: var(--muted);">Escanea para ver la demo en vivo</p>
                     </div>
                 </div>
 
-                <div class="contact-info">
-                    <h4 style="margin-bottom: 8px; color: white;">Contacto Directo</h4>
-                    <div class="contact-item"><i class="ph-bold ph-user"></i> Tu Nombre / CEO</div>
-                    <div class="contact-item"><i class="ph-bold ph-envelope"></i> contacto@chefedwin.com</div>
-                    <div class="contact-item"><i class="ph-bold ph-phone"></i> +57 300 000 0000</div>
+                <!-- RESULTS METRICS -->
+                <div class="metrics-block">
+                    <div class="section-label" style="margin-bottom:12px;"><i class="ph-bold ph-trend-up"></i>
+                        RESULTADOS ESPERADOS</div>
+                    <div class="metrics-row">
+                        <div>
+                            <div class="metric-val" style="font-size:20px; font-weight:800; color:var(--accent);">-85%
+                            </div>
+                            <div class="metric-lbl" style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                                Dudas Repetitivas</div>
+                        </div>
+                        <div style="width:1px; background:var(--border);"></div>
+                        <div>
+                            <div class="metric-val" style="font-size:20px; font-weight:800; color:white;">3h</div>
+                            <div class="metric-lbl" style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                                Ahorro Semanal</div>
+                        </div>
+                        <div style="width:1px; background:var(--border);"></div>
+                        <div>
+                            <div class="metric-val" style="font-size:20px; font-weight:800; color:var(--primary);">
+                                &lt;5s</div>
+                            <div class="metric-lbl" style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                                Velocidad Respuesta</div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- CALL TO ACTION -->
+                <div class="cta-row">
+                    <div class="cta-text">
+                        <h3>Ver Demo en Vivo</h3>
+                        <p>Escanea para acceder al Dashboard</p>
+                        <div style="margin-top:12px; font-size:13px; color:white;">
+                            <i class="ph-bold ph-globe"></i> chefedwin.onrender.com
+                        </div>
+                    </div>
+                    <div class="qr-container">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chefedwin.onrender.com"
+                            alt="QR">
+                    </div>
+                </div>
+
             </div>
 
         </div>

@@ -621,3 +621,10 @@ def terms_view(request):
     No authentication required.
     """
     return render(request, 'assistant/legal_terms.html')
+
+
+def one_pager_view(request):
+    """
+    Public view for Executive One-Pager.
+    """
+    return render(request, 'assistant/one_pager.html')

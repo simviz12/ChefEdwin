@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef Edwin - Executive One Pager</title>
+    <!-- Fonts: Plus Jakarta Sans for a modern tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            --primary: #818cf8;
+            /* Indigo */
+            --dark: #09090b;
+            /* Zinc 950 */
+            --card: #18181b;
+            /* Zinc 900 */
+            --text: #f4f4f5;
+            --muted: #a1a1aa;
+            --accent: #2dd4bf;
+            /* Teal */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
+            width: 210mm;
+            /* A4 Width */
+            min-height: 297mm;
+            /* A4 Height */
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+            background-image:
+                radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.15), transparent 30%),
+                radial-gradient(circle at 0% 100%, rgba(45, 212, 191, 0.05), transparent 30%);
+        }
+
+        /* LAYOUT GRID */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 40px;
+            height: 100%;
+        }
+
+        /* HEADER */
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #27272a;
+            padding-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            /* Using the static placeholder until real image loads */
+            background: linear-gradient(135deg, var(--primary), #c084fc);
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 30px;
+            color: white;
+        }
+
+        .brand h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .brand p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .tagline {
+            text-align: right;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        /* LEFT COLUMN: CONTENT */
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #27272a;
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d4d4d8;
+        }
+
+        .problem-text {
+            border-left: 3px solid #ef4444;
+            padding-left: 15px;
+        }
+
+        .solution-text {
+            border-left: 3px solid var(--accent);
+            padding-left: 15px;
+        }
+
+        .benefits-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 32px;
+            height: 32px;
+            background: rgba(129, 140, 248, 0.1);
+            color: var(--primary);
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+        }
+
+        /* RIGHT COLUMN: VISUALS */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .system-image-container {
+            width: 100%;
+            height: 300px;
+            background: #18181b;
+            border: 1px solid #3f3f46;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .system-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .call-to-action {
+            background: linear-gradient(135deg, var(--card), #202024);
+            border: 1px solid #3f3f46;
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .qr-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .qr-code {
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .contact-info {
+            text-align: right;
+        }
+
+        .contact-item {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* PRINT HELPER */
+        @media print {
+            body {
+                margin: 0;
+                padding: 20px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <!-- Using the local logo if available via relative path assuming this file is in root -->
+            <img src="./assistant/static/assistant/img/logo.png" alt="ChefEdwin" class="logo-img"
+                style="background:none;">
+            <div>
+                <h1>Chef Edwin</h1>
+                <p>Asistente Culinario Educativo con IA</p>
+            </div>
+        </div>
+        <div class="tagline">Solución EdTech Escalable</div>
+    </header>
+
+    <div class="container">
+
+        <!-- LEFT COLUMN -->
+        <div class="left-col">
+
+            <div class="box">
+                <div class="section-title"><i class="ph-bold ph-warning-circle"></i> EL PROBLEMA</div>
+                <div class="problem-text">
+                    <h2>Cuellos de botella en la formación técnica</h2>
+                    <p>Un instructor de cocina no puede responder dudas personalizadas a 30 estudiantes simultáneamente
+                        mientras supervisa procesos críticos (fuego, cuchillos). Las dudas técnicas fuera de clase
+                        quedan sin resolver.</p>
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="section-title"><i class="ph-bold ph-lightning"></i> LA SOLUCIÓN</div>
+                <div class="solution-text">
+                    <h2>Tutoría IA 24/7 vía WhatsApp</h2>
+                    <p>Un sistema inteligente que acompaña al estudiante en todo momento. Responde preguntas sobre
+                        recetas, tiempos, temperaturas y seguridad alimentaria al instante, usando la plataforma que
+                        ellos ya dominan: WhatsApp.</p>
+                </div>
+            </div>
+
+            <div class="box" style="flex:1;">
+                <div class="section-title"><i class="ph-bold ph-chart-line-up"></i> BENEFICIOS CLAVE</div>
+                <ul class="benefits-list">
+                    <li class="benefit-item">
+                        <div class="icon-box"><i class="ph-bold ph-rocket-launch"></i></div>
+                        <div>
+                            <strong>Escalabilidad Masiva</strong>
+                            <p style="font-size:13px; color:var(--muted)">Un solo sistema atiende a miles de alumnos
+                                simultáneamente sin saturarse.</p>
+                        </div>
+                    </li>
+                    <li class="benefit-item">
+                        <div class="icon-box"><i class="ph-bold ph-shield-check"></i></div>
+                        <div>
+                            <strong>Seguridad y Ética IA</strong>
+                            <p style="font-size:13px; color:var(--muted)">Respuestas filtradas y seguras. Protección
+                                contra datos sensibles y prevención de errores críticos.</p>
+                        </div>
+                    </li>
+                    <li class="benefit-item">
+                        <div class="icon-box"><i class="ph-bold ph-presentation-chart"></i></div>
+                        <div>
+                            <strong>Dashboard Ejecutivo</strong>
+                            <p style="font-size:13px; color:var(--muted)">Visualización en tiempo real de qué preguntan
+                                los estudiantes y cómo progresan.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="right-col">
+
+            <!-- SYSTEM IMAGE PLACEHOLDER -->
+            <div class="system-image-container">
+                <!-- SUGGESTION: Replace this src with a real screenshot of the dashboard -->
+                <div style="padding: 40px; text-align: center;">
+                    <i class="ph-duotone ph-desktop"
+                        style="font-size: 64px; margin-bottom: 20px; color: var(--primary);"></i>
+                    <h3>Dashboard Ejecutivo</h3>
+                    <p style="font-size: 12px; margin-top: 10px;">Vista en tiempo real de métricas y chats</p>
+                </div>
+                <!-- If you have a screenshot, uncomment below: -->
+                <!-- <img src="screenshot_dashboard.png" alt="Dashboard Interfaz"> -->
+            </div>
+
+            <div class="box" style="background: linear-gradient(135deg, #18181b, #09090b);">
+                <div class="section-title" style="color:var(--text);"><i class="ph-bold ph-users-three"></i> CASO DE USO
+                </div>
+                <p><em>"Un estudiante en práctica olvida la temperatura de pasteurización. En lugar de detener la
+                        producción para buscar al chef, consulta a Chef Edwin y obtiene la respuesta en 3
+                        segundos."</em></p>
+            </div>
+
+            <div class="call-to-action">
+                <div class="qr-section">
+                    <!-- Dynamic QR Code to the Live Site -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chefedwin.onrender.com"
+                        alt="Demo QR" class="qr-code">
+                    <div>
+                        <h3 style="margin-bottom: 4px;">Pruébalo Ahora</h3>
+                        <p style="font-size: 12px; color: var(--muted);">Escanea para ver la demo en vivo</p>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <h4 style="margin-bottom: 8px; color: white;">Contacto Directo</h4>
+                    <div class="contact-item"><i class="ph-bold ph-user"></i> Tu Nombre / CEO</div>
+                    <div class="contact-item"><i class="ph-bold ph-envelope"></i> contacto@chefedwin.com</div>
+                    <div class="contact-item"><i class="ph-bold ph-phone"></i> +57 300 000 0000</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

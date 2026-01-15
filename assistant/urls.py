@@ -10,5 +10,6 @@ urlpatterns = [
     path('dashboard/stats/', views.teacher_stats, name='teacher_stats'),
     path('research-chat/', views.research_chat, name='research_chat'),
     path('legal/terminos/', views.terms_view, name='legal_terms'),
+    path('info/', views.one_pager_view, name='one_pager'),
     path('ping/', lambda request: HttpResponse('pong'), name='ping'),
 ]

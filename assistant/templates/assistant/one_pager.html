@@ -719,17 +719,35 @@
                 </div>
 
                 <!-- CALL TO ACTION -->
-                <div class="cta-row">
-                    <div class="cta-text">
-                        <h3>Ver Demo en Vivo</h3>
-                        <p>Escanea para acceder al Dashboard</p>
-                        <div style="margin-top:12px; font-size:13px; color:white;">
-                            <i class="ph-bold ph-globe"></i> chefedwin.onrender.com
+                <div class="cta-row" style="flex-direction: column; align-items: flex-start; gap: 16px;">
+                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+                        <div class="cta-text">
+                            <h3>Ver Demo en Vivo</h3>
+                            <p>Escanea para acceder al Dashboard</p>
+                            <div style="margin-top:12px; font-size:13px; color:white;">
+                                <i class="ph-bold ph-globe"></i> chefedwin.onrender.com
+                            </div>
+                        </div>
+                        <div class="qr-container">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chefedwin.onrender.com"
+                                alt="QR">
                         </div>
                     </div>
-                    <div class="qr-container">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chefedwin.onrender.com"
-                            alt="QR">
+
+                    <!-- CONTACT DATA (New Block) -->
+                    <div
+                        style="width: 100%; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-top: 8px;">
+                        <div
+                            style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 8px;">
+                            Contacto</div>
+                        <div style="font-size: 13px; color: white; display: flex; flex-direction: column; gap: 4px;">
+                            <div style="display: flex; align-items: center; gap: 8px;"><i class="ph-bold ph-user"
+                                    style="color:var(--primary)"></i> [Nombre del Representante]</div>
+                            <div style="display: flex; align-items: center; gap: 8px;"><i class="ph-bold ph-envelope"
+                                    style="color:var(--primary)"></i> [correo@institucion.edu]</div>
+                            <div style="display: flex; align-items: center; gap: 8px;"><i class="ph-bold ph-phone"
+                                    style="color:var(--primary)"></i> [+57 300 000 0000]</div>
+                        </div>
                     </div>
                 </div>
 

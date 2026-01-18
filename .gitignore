@@ -1,5 +1,13 @@
 .env
+.env.local
+.env.production
 __pycache__/
 *.pyc
 db.sqlite3
 .DS_Store
+*.log
+temp/
+tmp/
+*.egg-info/
+dist/
+build/

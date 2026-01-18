@@ -8,9 +8,9 @@ django.setup()
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-username = 'chef'
-password = 'chef123'
-email = 'admin@chefedwin.com'
+username = os.getenv('DJANGO_ADMIN_USER', 'chef')
+password = os.getenv('DJANGO_ADMIN_PASSWORD', 'chef123')
+email = os.getenv('DJANGO_ADMIN_EMAIL', 'admin@chefedwin.com')
 
 try:
     user = User.objects.get(username=username)

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render build script for Chef Edwin
+# Neon/Render build script for Chef Edwin
 
 set -o errexit  # Exit on error
 
@@ -12,7 +12,8 @@ python manage.py collectstatic --no-input
 echo "Running database migrations..."
 python manage.py migrate
 
-echo "Creating superuser if needed..."
-python create_superuser.py
+echo "Creating/Updating admin user..."
+python reset_chef.py
+
 
 echo "Build completed successfully!"

@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fs@=rtgqcaczbdt_k(i02$8*p$81&e=w6m-wb9xp7u(8(wqqts')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'chef_edwin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Use PostgreSQL in production (Render), SQLite in development
+# Use PostgreSQL in production (Neon), SQLite in development
 if os.getenv('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(

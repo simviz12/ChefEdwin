@@ -3,7 +3,7 @@
 **Título Oficial:** Plataforma de Asistencia Educativa Culinaria Basada en Inteligencia Artificial Generativa Multimodal
 **Versión del Documento:** 1.0 (first edition)
 **Fecha de Emisión:** Diciembre 2025
-**Autor:** Carlos Benavides 
+**Autor:** Carlos Benavides 
 **Marco de Referencia:** C4 Model, IEEE 1471 (4+1), ISO/IEC 25010
 **Nivel de Acceso:** Uso Corporativo
 
@@ -11,14 +11,14 @@
 
 ## 📑 Índice Maestro
 
-1.  **Visión y Contexto (Modelo C4)**
-2.  **Vista Lógica y de Datos (ERD)**
-3.  **Vista de Procesos (Flujos Dinámicos)**
-4.  **Vista de Desarrollo y Decisiones (ADR)**
-5.  **Vista Física e Infraestructura**
-6.  **Requisitos y Niveles de Servicio (SLA)**
-7.  **Gestión de Riesgos y Seguridad**
-8.  **Evolución Futura**
+1.  **Visión y Contexto (Modelo C4)**
+2.  **Vista Lógica y de Datos (ERD)**
+3.  **Vista de Procesos (Flujos Dinámicos)**
+4.  **Vista de Desarrollo y Decisiones (ADR)**
+5.  **Vista Física e Infraestructura**
+6.  **Requisitos y Niveles de Servicio (SLA)**
+7.  **Gestión de Riesgos y Seguridad**
+8.  **Evolución Futura**
 
 ---
 
@@ -42,23 +42,23 @@ Esquema relacional implementado en `assistant/models.py`.
 
 ```mermaid
 erDiagram
-    STUDENT ||--o{ CONVERSATION_LOG : genera
-    
-    STUDENT {
-        bigint id PK
-        string phone_number UK
-        string role "student|teacher"
-        boolean is_authenticated
-        datetime created_at
-    }
+    STUDENT ||--o{ CONVERSATION_LOG : genera
+    
+    STUDENT {
+        bigint id PK
+        string phone_number UK
+        string role "student|teacher"
+        boolean is_authenticated
+        datetime created_at
+    }
 
-    CONVERSATION_LOG {
-        bigint id PK
-        bigint student_id FK
-        text message_body
-        text chef_response
-        timestamp timestamp
-    }
+    CONVERSATION_LOG {
+        bigint id PK
+        bigint student_id FK
+        text message_body
+        text chef_response
+        timestamp timestamp
+    }
 ```
 
 ---
@@ -67,47 +67,47 @@ erDiagram
 
 ### 3.1 Modelo de Concurrencia (Síncrono)
 Actualmente, el sistema opera con **Workers Síncronos** (Gunicorn).
-1.  WhatsApp envía mensaje.
-2.  Worker de Django recibe petición.
-3.  Worker llama a Gemini (Espera ~3-5s).
-4.  Worker guarda en BD.
-5.  Worker responde a WhatsApp.
+1.  WhatsApp envía mensaje.
+2.  Worker de Django recibe petición.
+3.  Worker llama a Gemini (Espera ~3-5s).
+4.  Worker guarda en BD.
+5.  Worker responde a WhatsApp.
 *Nota: Este modelo requiere configurar `timeout` alto en Gunicorn para evitar errores con imágenes pesadas.*
 
 ### 3.2 Diagrama de Secuencia: Flujo Real V1
 ```mermaid
 sequenceDiagram
-    autonumber
-    actor User as Estudiante
-    participant WA as WhatsApp
-    participant App as Django View
-    participant Logic as ai_service.py
-    participant DB as Database
-    participant Gemini as Google API
+    autonumber
+    actor User as Estudiante
+    participant WA as WhatsApp
+    participant App as Django View
+    participant Logic as ai_service.py
+    participant DB as Database
+    participant Gemini as Google API
 
-    User->>WA: "Dame una receta"
-    WA->>App: POST /webhook
-    
-    activate App
-    App->>DB: Get Student(phone)
-    
-    alt Usuario Autenticado
-        App->>Logic: get_chef_response()
-        activate Logic
-        Logic->>DB: Fetch Last 5 Logs
-        Logic->>Gemini: GenerateContent(History + Msg)
-        Gemini-->>Logic: "Aquí tienes la receta..."
-        Logic-->>App: Texto Generado
-        deactivate Logic
-        
-        App->>DB: Save ConversationLog
-        App-->>WA: TwiML <Response>
-    else No Autenticado
-        App-->>WA: "Pide Contraseña"
-    end
-    deactivate App
-    
-    WA-->>User: Mensaje en Celular
+    User->>WA: "Dame una receta"
+    WA->>App: POST /webhook
+    
+    activate App
+    App->>DB: Get Student(phone)
+    
+    alt Usuario Autenticado
+        App->>Logic: get_chef_response()
+        activate Logic
+        Logic->>DB: Fetch Last 5 Logs
+        Logic->>Gemini: GenerateContent(History + Msg)
+        Gemini-->>Logic: "Aquí tienes la receta..."
+        Logic-->>App: Texto Generado
+        deactivate Logic
+        
+        App->>DB: Save ConversationLog
+        App-->>WA: TwiML <Response>
+    else No Autenticado
+        App-->>WA: "Pide Contraseña"
+    end
+    deactivate App
+    
+    WA-->>User: Mensaje en Celular
 ```
 
 ---
@@ -115,11 +115,11 @@ sequenceDiagram
 ## 4. Vista de Desarrollo y Decisiones (ADR)
 
 ### 4.1 Stack Tecnológico Implementado
-*   **Backend:** Python 3.11 + Django 5.2.
-*   **Servidor Web:** Gunicorn (Producción - Render) / Runserver (Dev).
-*   **Base de Datos:** PostgreSQL con `dj-database-url`.
-*   **IA:** `google-generativeai` SDK.
-*   **Archivos:** Sistema de archivos efímero (`/tmp`) para descargas temporales de audio/imagen.
+*   **Backend:** Python 3.11 + Django 5.2.
+*   **Servidor Web:** Gunicorn (Producción - Render) / Runserver (Dev).
+*   **Base de Datos:** PostgreSQL con `dj-database-url`.
+*   **IA:** `google-generativeai` SDK.
+*   **Archivos:** Sistema de archivos efímero (`/tmp`) para descargas temporales de audio/imagen.
 
 ### 4.2 Registro de Decisiones Arquitectónicas (ADR)
 
@@ -137,34 +137,34 @@ sequenceDiagram
 
 ```mermaid
 graph TD
-    subgraph Internet
-        User[Móvil]
-        Admin[Navegador]
-    end
+    subgraph Internet
+        User[Móvil]
+        Admin[Navegador]
+    end
 
-    subgraph "Nube (Render.com)"
-        LB[Load Balancer]
-        
-        subgraph "Web Service"
-            Django[Instancia Gunicorn]
-            TempFile[Disco Efímero /tmp]
-        end
-        
-        subgraph "Managed Data"
-            Postgres[(Base de Datos)]
-        end
-    end
-    
-    subgraph "Google Cloud"
-        VertexAI[Gemini API]
-    end
-    
-    User -->|HTTPS| LB
-    Admin -->|HTTPS| LB
-    LB --> Django
-    Django --> Postgres
-    Django -->|API Call| VertexAI
-    Django -->|Escribe| TempFile
+    subgraph "Nube (Render.com)"
+        LB[Load Balancer]
+        
+        subgraph "Web Service"
+            Django[Instancia Gunicorn]
+            TempFile[Disco Efímero /tmp]
+        end
+        
+        subgraph "Managed Data"
+            Postgres[(Base de Datos)]
+        end
+    end
+    
+    subgraph "Google Cloud"
+        VertexAI[Gemini API]
+    end
+    
+    User -->|HTTPS| LB
+    Admin -->|HTTPS| LB
+    LB --> Django
+    Django --> Postgres
+    Django -->|API Call| VertexAI
+    Django -->|Escribe| TempFile
 ```
 
 ---
@@ -172,14 +172,14 @@ graph TD
 ## 6. Requisitos Implementados
 
 ### 6.1 Funcionalidades Actuales
-*   **RF-01:** Webhook compatible con Twilio para Texto, Imagen y Audio.
-*   **RF-02:** Autenticación básica por contraseña (campo `is_authenticated` en BD).
-*   **RF-03:** Diferenciación de Roles (Prompt de Profesor vs Estudiante).
-*   **RF-04:** Historial de conversación persistente en PostgreSQL.
+*   **RF-01:** Webhook compatible con Twilio para Texto, Imagen y Audio.
+*   **RF-02:** Autenticación básica por contraseña (campo `is_authenticated` en BD).
+*   **RF-03:** Diferenciación de Roles (Prompt de Profesor vs Estudiante).
+*   **RF-04:** Historial de conversación persistente en PostgreSQL.
 
 ### 6.2 SLAs Actuales
-*   **Latencia Promedio:** 3-6 segundos (dependiente de API Google).
-*   **Disponibilidad:** Dependiente de Render Free/Starter Tier.
+*   **Latencia Promedio:** 3-6 segundos (dependiente de API Google).
+*   **Disponibilidad:** Dependiente de Render Free/Starter Tier.
 
 ---
 
@@ -196,9 +196,9 @@ graph TD
 ## 8. Evolución Futura (Roadmap)
 
 Tecnologías consideradas para futuras versiones (No implementadas aún):
-*   **V2:** Tablas de Perfil y Gamificación.
-*   **V3:** Colas de tareas para evitar timeouts en audios largos.
-*   **V4:** Interfaz Web React separada.
+*   **V2:** Tablas de Perfil y Gamificación.
+*   **V3:** Colas de tareas para evitar timeouts en audios largos.
+*   **V4:** Interfaz Web React separada.
 
 ---
 **Firma de Aprobación Técnica:**
